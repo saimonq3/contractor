@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+django-filter = "*"
+dj-database-url = "*"
+python-dotenv = "*"
+psycopg2-binary = "*"
+django-admin-rangefilter = "*"
+django-cors-headers = "*"
+drf-yasg = "*"
+gunicorn = "*"
+django-simple-history = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
