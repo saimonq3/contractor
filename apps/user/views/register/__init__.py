@@ -1,0 +1,1 @@
+from .view import RegisterUser as register_v1

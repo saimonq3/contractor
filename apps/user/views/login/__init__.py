@@ -1,0 +1,1 @@
+from .view import LoginView as login_v1

@@ -26,13 +26,15 @@ class User(AbstractUser):
 		('M', 'Мужской')
 	)
 
+	username = None
+
 	uuid = models.UUIDField(unique=True, null=True, default=uuid.uuid4, editable=False, verbose_name='UUID')
 	email = models.EmailField(blank=False, unique=True, db_index=True, verbose_name=_('email'))
 	email_verified = models.BooleanField(default=False, verbose_name='Email верифицирован')
 	first_name = models.CharField(max_length=200, verbose_name='Имя')
 	last_name = models.CharField(max_length=200, verbose_name='Фамилия')
 	patronymic = models.CharField(max_length=200, default=None, blank=True, null=True, verbose_name='Отчество')
-	phone_number = PhoneNumberField(null=True, blank=True, default=None, verbose_name='Телефон')
+	phone_number = PhoneNumberField(null=True, blank=True, default=None, unique=True, verbose_name='Телефон')
 	country_code = models.CharField(max_length=2, blank=True, null=True, verbose_name='Код страны')
 	sex = models.CharField(choices=SEX, max_length=1, blank=True, null=True, default=None, verbose_name='Пол')
 	avatar = models.ImageField(
