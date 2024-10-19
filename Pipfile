@@ -15,6 +15,10 @@ django-cors-headers = "*"
 drf-yasg = "*"
 gunicorn = "*"
 django-simple-history = "*"
+django-model-utils = "*"
+django-phonenumber-field = "*"
+phonenumbers = "*"
+pillow = "*"
 
 [dev-packages]
 

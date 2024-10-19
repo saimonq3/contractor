@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'corsheaders',
+    'phonenumber_field',
 
     'apps.user',
 ]
@@ -117,7 +118,7 @@ LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
-# AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'user.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
