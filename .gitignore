@@ -27,6 +27,7 @@ coverage
 *.sw?
 .env
 /**/*.pyc
+.fleet/
 
 db.sqlite3
 
