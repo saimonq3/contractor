@@ -27,6 +27,10 @@ INSTALLED_APPS = [
     'phonenumber_field',
 
     'apps.user',
+    'apps.company',
+    'apps.project',
+    'apps.pact',
+    'apps.dto',
 ]
 
 REST_FRAMEWORK = {
@@ -84,7 +88,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'contractor.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -122,7 +125,6 @@ AUTH_USER_MODEL = 'user.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://*.tolq3.ru',
     'https://*.tolq3.ru',
     'https://contractor.tolq3.ru',
     'http://localhost',
@@ -131,10 +133,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://192.168.1.127:8000'
 ]
 
-
 CORS_ALLOWED_ORIGINS = [
     'https://*.tolq3.ru',
-    'http://*.tolq3.ru',
     'http://localhost',
     'http://localhost:8080',
     'http://192.168.1.127:8000',
