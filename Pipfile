@@ -19,6 +19,7 @@ django-model-utils = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 pillow = "*"
+django-sql-explorer = "*"
 
 [dev-packages]
 

@@ -9,5 +9,6 @@ urlpatterns = [
     path('api/company/', include('apps.company.urls')),
     path('api/project/', include('apps.project.urls')),
     path('api/dto/', include('apps.dto.urls')),
+    path('explorer/', include('explorer.urls')),
 
 ]

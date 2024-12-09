@@ -1,5 +1,8 @@
+import uuid
+
 from django.db import models
 from model_utils import Choices
+from simple_history.models import HistoricalRecords
 
 
 class Field(models.Model):
@@ -11,6 +14,9 @@ class Field(models.Model):
         (5, 'fk', 'ForeignKey'),
     )
 
+    history = HistoricalRecords()
+
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Идентификатор')
     dto = models.ForeignKey('dto.DTO', on_delete=models.CASCADE, default=None, null=True, blank=True,
                             related_name='dto_fields')
     type = models.PositiveIntegerField(choices=TYPE, default=None, null=True, blank=True)
@@ -21,4 +27,4 @@ class Field(models.Model):
 
     class Meta:
         verbose_name = 'Поле ДТО'
-        verbose_name_plural = 'Поял ДТО'
+        verbose_name_plural = 'Поля ДТО'

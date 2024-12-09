@@ -1,7 +1,11 @@
+import uuid
+
 from django.db import models
 
 
 class Project(models.Model):
+
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Идентификатор')
     name = models.CharField(max_length=128)
     description = models.TextField(verbose_name='Описание', default=None, null=True, blank=True)
     owner = models.ForeignKey('user.User', on_delete=models.PROTECT, related_name='project_owner')
@@ -14,7 +18,3 @@ class Project(models.Model):
     class Meta:
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'
-
-    def delete(self, using=None, keep_parents=False):
-        self.athived = True
-        return self.save()

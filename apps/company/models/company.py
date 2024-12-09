@@ -1,7 +1,14 @@
+import uuid
+
 from django.db import models
 
 
 class Company(models.Model):
+	"""
+	Модель описывает компании
+	"""
+
+	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Идентификатор')
 	name = models.CharField(max_length=128)
 	owner = models.ForeignKey('user.User', on_delete=models.PROTECT, default=None, null=True, blank=True,
 							  related_name='company_owner')
@@ -13,7 +20,3 @@ class Company(models.Model):
 	class Meta:
 		verbose_name = 'Комания'
 		verbose_name_plural = 'Компании'
-
-	def delete(self, using=None, keep_parents=False):
-		self.athived = True
-		return self.save()

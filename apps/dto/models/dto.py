@@ -1,7 +1,13 @@
+import uuid
+
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 
 class DTO(models.Model):
+	history = HistoricalRecords()
+
+	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Идентификатор')
 	name = models.CharField(max_length=128)
 	project = models.ForeignKey('project.Project', on_delete=models.PROTECT, default=None, null=True, blank=True,
 								related_name='dto')
