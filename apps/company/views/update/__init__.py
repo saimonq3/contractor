@@ -1,0 +1,2 @@
+from .view import CompanyUpdateNameViewV1 as company_update_name_v1
+from .view import CompanyChangeOwnerViewV1 as company_update_owner_v1

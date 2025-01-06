@@ -1,0 +1,1 @@
+from .view import CompanyDetailViewV1 as company_detail_v1

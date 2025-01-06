@@ -20,3 +20,4 @@ class Company(models.Model):
 	class Meta:
 		verbose_name = 'Комания'
 		verbose_name_plural = 'Компании'
+		unique_together = ['name', 'owner']

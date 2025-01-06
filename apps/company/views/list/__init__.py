@@ -1,0 +1,1 @@
+from .view import CompanyListViewV1 as company_list_v1

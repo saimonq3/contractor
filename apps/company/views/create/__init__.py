@@ -1,0 +1,1 @@
+from .view import CompanyCreateViewV1 as company_create
