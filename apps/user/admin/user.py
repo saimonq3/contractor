@@ -21,6 +21,7 @@ class UserAdmin(BaseUserAdmin):
                     'last_name',
                     'email',
                     'email_verified',
+                    'username',
                     'sex',
                     'phone_number',
                     'country_code',
