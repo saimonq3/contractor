@@ -1,0 +1,1 @@
+from .view import ProjectCreateViewV1 as project_create_v1

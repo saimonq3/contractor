@@ -26,7 +26,7 @@ class User(AbstractUser):
 		('M', 'Мужской')
 	)
 
-	username = None
+	username = models.CharField(max_length=32, default=None, blank=True, null=True)
 
 	uuid = models.UUIDField(unique=True, null=True, default=uuid.uuid4, editable=False, verbose_name='UUID')
 	email = models.EmailField(blank=False, unique=True, db_index=True, verbose_name=_('email'))

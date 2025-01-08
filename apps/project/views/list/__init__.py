@@ -1,0 +1,1 @@
+from .view import ProjectListViewV1 as project_list_v1

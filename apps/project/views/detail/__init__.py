@@ -1,0 +1,1 @@
+from .view import ProjectDetailViewV1 as project_detail_v1

@@ -5,5 +5,9 @@ class CompanyUpdateQuerySerializer(serializers.Serializer):
 	name = serializers.CharField()
 
 
-class CompanyChangeOwnerQuerySerializer(serializers.Serializer):
+class CompanyMemberV1Serializer(serializers.Serializer):
 	user = serializers.UUIDField()
+
+class CompanyChangeMemberV1Serializer(serializers.Serializer):
+	user = serializers.UUIDField()
+	is_admin = serializers.BooleanField()

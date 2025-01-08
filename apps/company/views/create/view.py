@@ -3,7 +3,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from utils import api
 from .serializer import CompanyCreateV1RequestQuery, CompanyCreateSerializerV1
-from ...models import Company
+from ...models import Company, Members
 
 
 class CompanyCreateViewV1(GenericAPIView):
@@ -21,12 +21,20 @@ class CompanyCreateViewV1(GenericAPIView):
 			)
 
 		# В случае если пользователь пытается создать компанию которая уже есть, то вернем ее без ошибок
-		company = Company.objects.get_or_create(
+		company, added = Company.objects.get_or_create(
 			name=request.data.get('name'),
 			owner=request.user
 		)
 
-		serializer = CompanyCreateSerializerV1(company[0])
+		# Сразу назначаем пользователя сотрудником и даем ему админа
+		if not added:
+			Members.objects.create(
+				company=company,
+				user=request.user,
+				is_admin=True
+			)
+
+		serializer = CompanyCreateSerializerV1(company)
 		return api.response(
 			serializer.data
 		)

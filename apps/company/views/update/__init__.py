@@ -1,2 +1,5 @@
 from .view import CompanyUpdateNameViewV1 as company_update_name_v1
 from .view import CompanyChangeOwnerViewV1 as company_update_owner_v1
+from .view import CompanyAddMembersViewV1 as company_add_member_v1
+from .view import CompanyRemoveMembersViewV1 as company_remove_member_v1
+from .view import CompanyChangeMemberPermissionViewV1 as company_member_change_permission_v1

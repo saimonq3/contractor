@@ -1,1 +1,1 @@
-from .view import CompanyCreateViewV1 as company_create
+from .view import CompanyCreateViewV1 as company_create_v1

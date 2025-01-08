@@ -3,9 +3,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.user.models import User
-from ...models import Members
-from .serializer import CompanyUpdateQuerySerializer, CompanyChangeOwnerQuerySerializer
 from utils import api
+from .serializer import CompanyUpdateQuerySerializer, CompanyMemberV1Serializer, CompanyChangeMemberV1Serializer
+from ...models import Members
 
 
 class CompanyUpdateNameViewV1(APIView):
@@ -53,7 +53,7 @@ class CompanyChangeOwnerViewV1(APIView):
 
 	@transaction.atomic
 	def post(self, request, uuid):
-		query_serializer = CompanyChangeOwnerQuerySerializer(data=request.data)
+		query_serializer = CompanyMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
 			return api.error_response(
 				status=400,
@@ -106,6 +106,162 @@ class CompanyChangeOwnerViewV1(APIView):
 class CompanyAddMembersViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
+	def post(self, request, uuid):
+		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
+		if not query_serializer.is_valid():
+			return api.error_response(
+				status=400,
+				message=str(query_serializer.errors)
+			)
+
+		try:
+			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
+		except Members.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Компания не найдена или у вас нет прав на ее изменение'
+			)
+
+		try:
+			user = User.objects.get(uuid=request.data.get('uuid'))
+		except User.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Пользователь не найден'
+			)
+
+		company = company_admin.company
+
+		Members.objects.create(
+			company=company,
+			user=user,
+			is_admin=request.data.get('is_admin')
+		)
+
+		return api.response(
+			{
+				'uuid': company.uuid,
+				'name': company.name,
+				'owner': company.owner.fio if company.owner else '',
+				'members': [
+					{
+						'name': member.user.fio,
+						'is_admin': member.is_admin
+					}
+					for member in company.company_members.all()
+				]
+			}
+		)
+
 
 class CompanyRemoveMembersViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
+
+	def post(self, request, uuid):
+		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
+		if not query_serializer.is_valid():
+			return api.error_response(
+				status=400,
+				message=str(query_serializer.errors)
+			)
+
+		try:
+			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
+		except Members.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Компания не найдена или у вас нет прав на ее изменение'
+			)
+
+		try:
+			user = User.objects.get(uuid=request.data.get('uuid'))
+		except User.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Пользователь не найден'
+			)
+
+		if user == company_admin.user:
+			return api.error_response(
+				status=404,
+				message='Польователь не может удалить сам себя'
+			)
+
+		company = company_admin.company
+
+		try:
+			Members.objects.get(user=user, company=company).delete()
+		except Members.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Пользователь не является сотрудником компании'
+			)
+
+		return api.response(
+			{
+				'uuid': company.uuid,
+				'name': company.name,
+				'owner': company.owner.fio if company.owner else '',
+				'members': [
+					{
+						'name': member.user.fio,
+						'is_admin': member.is_admin
+					}
+					for member in company.company_members.all()
+				]
+			}
+		)
+
+
+class CompanyChangeMemberPermissionViewV1(APIView):
+	permission_classes = [IsAuthenticated, ]
+
+	def post(self, request, uuid):
+		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
+		if not query_serializer.is_valid():
+			return api.error_response(
+				status=400,
+				message=str(query_serializer.errors)
+			)
+
+		try:
+			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
+		except Members.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Компания не найдена или у вас нет прав на ее изменение'
+			)
+
+		try:
+			user = User.objects.get(uuid=request.data.get('uuid'))
+		except User.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Пользователь не найден'
+			)
+
+		company = company_admin.company
+
+		try:
+			member = Members.objects.get(user=user, company=company)
+			member.is_admin = request.data.get('is_admin')
+		except Members.DoesNotExist:
+			return api.error_response(
+				status=404,
+				message='Пользователь не является сотрудником компании'
+			)
+
+		return api.response(
+			{
+				'uuid': company.uuid,
+				'name': company.name,
+				'owner': company.owner.fio if company.owner else '',
+				'members': [
+					{
+						'name': member.user.fio,
+						'is_admin': member.is_admin
+					}
+					for member in company.company_members.all()
+				]
+			}
+		)

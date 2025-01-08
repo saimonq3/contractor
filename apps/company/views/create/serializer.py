@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.company.models import Company
+from ...models import Company
 
 
 class CompanyCreateV1RequestQuery(serializers.Serializer):

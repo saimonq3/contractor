@@ -1,0 +1,6 @@
+from .view import ProjectAddMemberViewV1 as project_add_member_v1
+from .view import ProjectRemoveMemberViewV1 as project_remove_member_v1
+from .view import ProjectChangeMemberPermissionViewV1 as project_change_member_permission_v1
+from .view import ProjectUpdateInfoViewV1 as project_update_info_v1
+from .view import ProjectChangeCompanyViewV1 as project_change_company_v1
+from .view import ProjectChangeOwnerViewV1 as project_change_owner_v1
