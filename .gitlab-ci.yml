@@ -10,7 +10,7 @@ before_script:
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
 
-  - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+  - ssh-keyscan 192.168.1.127 >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
 
 
