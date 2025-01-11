@@ -1,7 +1,9 @@
 stages:
-    - deploy
-deploy-job:
-    stage: deploy
+    - build
+#    - test
+#    - deploy
+
+build:
+    stage: build
     script:
-        - echo "Deploying application..."
-        - echo "Application successfully deployed."
+        - ssh tolq3@192.168.1.127
