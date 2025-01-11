@@ -18,7 +18,7 @@ before_script:
 Test SSH:
   script:
   - ssh tolq3@192.168.1.127
-  - cd /home/tolq3/contractor
+  - pwd
   - ls
   - git pull
   - docker-compose up -d
