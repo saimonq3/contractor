@@ -1,0 +1,35 @@
+-i https://pypi.org/simple
+asgiref==3.8.1 ; python_version >= '3.8'
+certifi==2024.12.14 ; python_version >= '3.6'
+cffi==1.17.1 ; platform_python_implementation != 'PyPy'
+charset-normalizer==3.4.1 ; python_version >= '3.7'
+cryptography==44.0.0 ; python_version >= '3.7' and python_full_version not in '3.9.0, 3.9.1'
+dj-database-url==2.3.0
+django==5.1.4
+django-admin-rangefilter==0.13.2
+django-appconf==1.0.6 ; python_version >= '3.7'
+django-cors-headers==4.6.0
+django-cryptography-django5==2.2 ; python_version >= '3.8'
+django-filter==24.3
+django-model-utils==5.0.0
+django-phonenumber-field==8.0.0
+django-simple-history==3.7.0
+django-sql-explorer==5.3
+djangorestframework==3.15.2
+drf-yasg==1.21.8
+gunicorn==23.0.0
+idna==3.10 ; python_version >= '3.6'
+inflection==0.5.1 ; python_version >= '3.5'
+packaging==24.2 ; python_version >= '3.8'
+phonenumbers==8.13.52
+pillow==11.1.0
+psycopg2-binary==2.9.10
+pycparser==2.22 ; python_version >= '3.8'
+python-dotenv==1.0.1
+pytz==2024.2
+pyyaml==6.0.2 ; python_version >= '3.8'
+requests==2.32.3 ; python_version >= '3.8'
+sqlparse==0.5.3 ; python_version >= '3.8'
+typing-extensions==4.12.2 ; python_version >= '3.8'
+uritemplate==4.1.1 ; python_version >= '3.6'
+urllib3==2.3.0 ; python_version >= '3.9'

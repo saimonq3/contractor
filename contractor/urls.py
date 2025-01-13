@@ -1,3 +1,5 @@
+from django.conf.urls.static import static
+from . import settings
 from django.contrib import admin
 from django.urls import path, include
 from apps.user import views as user_views
@@ -11,5 +13,7 @@ urlpatterns = [
     path('api/project/', include('apps.project.views.urls')),
     path('api/dto/', include('apps.dto.urls')),
     path('explorer/', include('explorer.urls')),
-
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
