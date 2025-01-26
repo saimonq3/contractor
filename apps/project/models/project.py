@@ -10,7 +10,7 @@ class Project(models.Model):
     description = models.TextField(verbose_name='Описание', default=None, null=True, blank=True)
     owner = models.ForeignKey('user.User', on_delete=models.PROTECT, related_name='project_owner')
     company = models.ForeignKey('company.Company', on_delete=models.PROTECT, related_name='projects')
-    arhived = models.BooleanField(default=False)
+    base_url = models.CharField(max_length=128, default=None, blank=True, null=True, verbose_name='Базовый URL проекта')
 
     def __str__(self):
         return f'{self.name}__{self.company}'

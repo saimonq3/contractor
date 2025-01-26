@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.company.models import Members as CompanyMembers
+from utils.models import normalize_base_url
 from ...models import Project, Members as ProjectMembers
 from .serializers import ProjectCreateV1RequestQuery
 from utils import api
@@ -34,7 +35,8 @@ class ProjectCreateViewV1(APIView):
 			name=request.data.get('name'),
 			description=request.data.get('description'),
 			owner=request.user,
-			company=company
+			company=company,
+			base_url=normalize_base_url(request.data.get('base_url'))
 		)
 
 		ProjectMembers.objects.create(

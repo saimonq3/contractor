@@ -16,7 +16,6 @@ class ProjectAdmin(admin.ModelAdmin):
 		'company',
 		'description',
 		'owner',
-		'arhived',
 		'id'
 	]
 	fields = [
@@ -25,7 +24,7 @@ class ProjectAdmin(admin.ModelAdmin):
 		'company',
 		'description',
 		'owner',
-		'arhived',
+		'base_url',
 		'id'
 	]
 	readonly_fields = [

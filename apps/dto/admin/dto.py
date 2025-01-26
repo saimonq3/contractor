@@ -15,7 +15,6 @@ class DTOAdmin(admin.ModelAdmin):
 		'name',
 		'project',
 		'description',
-		'arhived',
 		'id'
 	]
 	fields = [
@@ -23,7 +22,7 @@ class DTOAdmin(admin.ModelAdmin):
 		'name',
 		'project',
 		'description',
-		'arhived',
+		'base_url',
 		'id'
 	]
 	readonly_fields = [

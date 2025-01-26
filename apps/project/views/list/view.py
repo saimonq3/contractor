@@ -22,6 +22,7 @@ class ProjectListViewV1(APIView):
 					'uuid': member.project.uuid,
 					'name': member.project.name,
 					'description': member.project.description,
+					'base_url': member.project.base_url,
 					'is_admin': member.is_admin,
 					'company': {
 						'uuid': member.project.company.uuid,

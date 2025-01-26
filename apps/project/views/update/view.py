@@ -64,6 +64,7 @@ class ProjectAddMemberViewV1(APIView):
 				'description': project.description,
 				'owner': project.owner.fio,
 				'company': project.company.name,
+				'base_url': project.base_url,
 				'members': [
 					{
 						'user': member.user.fio,
@@ -129,6 +130,7 @@ class ProjectRemoveMemberViewV1(APIView):
 				'description': project.description,
 				'owner': project.owner.fio,
 				'company': project.company.name,
+				'base_url': project.base_url,
 				'members': [
 					{
 						'user': member.user.fio,
@@ -198,6 +200,7 @@ class ProjectChangeMemberPermissionViewV1(APIView):
 				'description': project.description,
 				'owner': project.owner.fio,
 				'company': project.company.name,
+				'base_url': project.base_url,
 				'members': [
 					{
 						'user': member.user.fio,
@@ -244,6 +247,7 @@ class ProjectUpdateInfoViewV1(APIView):
 				'description': project.description,
 				'owner': project.owner.fio,
 				'company': project.company.name,
+				'base_url': project.base_url,
 				'members': [
 					{
 						'user': member.user.fio,
@@ -306,6 +310,7 @@ class ProjectChangeCompanyViewV1(APIView):
 				'description': project.description,
 				'owner': project.owner.fio,
 				'company': project.company.name,
+				'base_url': project.base_url,
 				'members': [
 					{
 						'user': member.user.fio,
@@ -370,6 +375,7 @@ class ProjectChangeOwnerViewV1(APIView):
 				'description': project.description,
 				'owner': project.owner.fio,
 				'company': project.company.name,
+				'base_url': project.base_url,
 				'members': [
 					{
 						'user': member.user.fio,

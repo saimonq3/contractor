@@ -30,6 +30,7 @@ class ProjectDetailViewV1(APIView):
 				'description': project.description,
 				'owner': project.owner.fio,
 				'company': project.company.name,
+				'base_url': project.base_url,
 				'members': [
 					{
 						'user': member.user.fio,
