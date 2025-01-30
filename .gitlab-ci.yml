@@ -6,7 +6,7 @@ variables:
   NEED_VOTES: 1
 
 include:
-  - remote: "https://git.tolq3.ru/manhattan/gitlab-ce-mr-approvals/ci/-/raw/master/check-approve.gitlab-ci.yml"
+  - remote: "https://git.tolq3.ru/manhattan/gitlab-ce-mr-approvals/-/blob/main/check-approve.gitlab-ci.yml"
 
 run-myapp:
   stage: build
