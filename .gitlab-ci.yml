@@ -10,4 +10,4 @@ include:
 
 run-myapp:
   stage: build
-  script: echo "Hello world"
+  script: echo "Hello world test"
