@@ -12,11 +12,5 @@ services:
       - ${PWD}/.env:/app/.env:ro
       - ${PWD}/apps:/app/apps
 
-  test:
-    build:
-      context: .
-    command: python manage.py test
-    restart: "no"
-
 volumes:
   app-volume:

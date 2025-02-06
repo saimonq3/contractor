@@ -1,0 +1,12 @@
+# docker-compose.test.yml
+version: '3'
+services:
+  test:
+    build: .
+    command: python manage.py test
+    environment:
+      - DB_HOST=test-db
+  test-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: test_db
