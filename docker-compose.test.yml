@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   test:
-    image: docker.tolq3.ru/contractor:%build.number%
     build:
       context: .
       dockerfile: Dockerfile
