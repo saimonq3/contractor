@@ -1,5 +1,6 @@
 services:
   app:
+    image: docker.tolq3.ru/contractor:%build.number%
     build:
       context: .
     command: >
