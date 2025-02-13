@@ -1,5 +1,6 @@
 services:
   app:
+    image: docker.tolq3.ru/contractor:build-${BUILD_NUMBER_ACCOUNTOWNER}
     build:
       context: .
     command: >
@@ -11,12 +12,6 @@ services:
       - ${PWD}/statica:/app/statica
       - ${PWD}/.env:/app/.env:ro
       - ${PWD}/apps:/app/apps
-
-  test:
-    build:
-      context: .
-    command: python manage.py test
-    restart: "no"
 
 volumes:
   app-volume:

@@ -1,0 +1,27 @@
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate && python manage.py test -p "*_test.py""
+    environment:
+      - DEBUG=False
+      - DB_HOST=test-db
+      - DB_NAME=contractor_test
+      - DB_USER=user
+      - DB_PASSWORD=password
+    depends_on:
+      - test-db
+
+  test-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: contractor_test
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_test_data:
