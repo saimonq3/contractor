@@ -7,6 +7,7 @@ from utils.models import normalize_base_url
 from ...models import Project, Members as ProjectMembers
 from .serializers import ProjectCreateV1RequestQuery
 from utils import api
+from ...serializers import ProjectDetailSerializerV1
 
 
 class ProjectCreateViewV1(APIView):
@@ -57,15 +58,5 @@ class ProjectCreateViewV1(APIView):
 			)
 
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': {
-					'name': company.name,
-					'uuid': company.uuid
-				},
-				'count_members': project.project_members.count()
-			}
+			ProjectDetailSerializerV1(project).data
 		)

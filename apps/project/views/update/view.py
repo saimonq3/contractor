@@ -4,20 +4,15 @@ from rest_framework.views import APIView
 from apps.company.models import Company
 from apps.user.models import User
 from utils import api
-from .serializers import ProjectMemberSerializerV1, ProjectUpdateInfoSerializerV1
+from .serializers import ProjectUpdateInfoSerializerV1
 from ...models import Project, Members
+from ...serializers import ProjectDetailSerializerV1
 
 
 class ProjectAddMemberViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
 	def post(self, request, project_uuid):
-		check_query_serializer = ProjectMemberSerializerV1(data=request.data)
-		if not check_query_serializer.is_valid():
-			return api.error_response(
-				status=400,
-				message=str(check_query_serializer.error_messages)
-			)
 		try:
 			project = Project.objects.get(uuid=project_uuid)
 		except Project.DoesNotExist:
@@ -50,29 +45,8 @@ class ProjectAddMemberViewV1(APIView):
 			is_admin=new_member_is_admin if new_member_is_admin else False
 		)
 
-		project_members = (
-			Members.objects
-			.filter(project=project)
-			.order_by('-is_admin', 'user__first_name', 'user__last_name')
-			.select_related('user')
-		)
-
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': project.company.name,
-				'base_url': project.base_url,
-				'members': [
-					{
-						'user': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in project_members
-				]
-			}
+			ProjectDetailSerializerV1(project, many=True).data
 		)
 
 
@@ -80,12 +54,6 @@ class ProjectRemoveMemberViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
 	def post(self, request, project_uuid):
-		check_query_serializer = ProjectMemberSerializerV1(data=request.data)
-		if not check_query_serializer.is_valid():
-			return api.error_response(
-				status=400,
-				message=str(check_query_serializer.error_messages)
-			)
 		try:
 			project = Project.objects.get(uuid=project_uuid)
 		except Project.DoesNotExist:
@@ -116,29 +84,8 @@ class ProjectRemoveMemberViewV1(APIView):
 				message='Пользователь не являеться участкником проекта'
 			)
 
-		project_members = (
-			Members.objects
-			.filter(project=project)
-			.order_by('-is_admin', 'user__first_name', 'user__last_name')
-			.select_related('user')
-		)
-
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': project.company.name,
-				'base_url': project.base_url,
-				'members': [
-					{
-						'user': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in project_members
-				]
-			}
+			ProjectDetailSerializerV1(project, many=True).data
 		)
 
 
@@ -146,12 +93,6 @@ class ProjectChangeMemberPermissionViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
 	def post(self, request, project_uuid):
-		check_query_serializer = ProjectMemberSerializerV1(data=request.data)
-		if not check_query_serializer.is_valid():
-			return api.error_response(
-				status=400,
-				message=str(check_query_serializer.error_messages)
-			)
 		try:
 			project = Project.objects.get(uuid=project_uuid)
 		except Project.DoesNotExist:
@@ -186,29 +127,8 @@ class ProjectChangeMemberPermissionViewV1(APIView):
 				message='Пользователь не являеться участкником проекта'
 			)
 
-		project_members = (
-			Members.objects
-			.filter(project=project)
-			.order_by('-is_admin', 'user__first_name', 'user__last_name')
-			.select_related('user')
-		)
-
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': project.company.name,
-				'base_url': project.base_url,
-				'members': [
-					{
-						'user': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in project_members
-				]
-			}
+			ProjectDetailSerializerV1(project, many=True).data
 		)
 
 
@@ -233,29 +153,8 @@ class ProjectUpdateInfoViewV1(APIView):
 		serializer = ProjectUpdateInfoSerializerV1(data=request.data)
 		serializer.update(project, validated_data=request.data)
 
-		project_members = (
-			Members.objects
-			.filter(project=project)
-			.order_by('-is_admin', 'user__first_name', 'user__last_name')
-			.select_related('user')
-		)
-
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': project.company.name,
-				'base_url': project.base_url,
-				'members': [
-					{
-						'user': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in project_members
-				]
-			}
+			ProjectDetailSerializerV1(project, many=True).data
 		)
 
 
@@ -296,29 +195,8 @@ class ProjectChangeCompanyViewV1(APIView):
 
 		project.refresh_from_db()
 
-		project_members = (
-			Members.objects
-			.filter(project=project)
-			.order_by('-is_admin', 'user__first_name', 'user__last_name')
-			.select_related('user')
-		)
-
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': project.company.name,
-				'base_url': project.base_url,
-				'members': [
-					{
-						'user': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in project_members
-				]
-			}
+			ProjectDetailSerializerV1(project, many=True).data
 		)
 
 
@@ -361,27 +239,6 @@ class ProjectChangeOwnerViewV1(APIView):
 
 		project.refresh_from_db()
 
-		project_members = (
-			Members.objects
-			.filter(project=project)
-			.order_by('-is_admin', 'user__first_name', 'user__last_name')
-			.select_related('user')
-		)
-
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': project.company.name,
-				'base_url': project.base_url,
-				'members': [
-					{
-						'user': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in project_members
-				]
-			}
+			ProjectDetailSerializerV1(project, many=True).data
 		)

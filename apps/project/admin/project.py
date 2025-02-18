@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from apps.project.models import Project, Members
+from utils.admin_mixin import CreatedByModelAdminMixin
 
 
 class MembersInLine(admin.TabularInline):
@@ -9,14 +10,15 @@ class MembersInLine(admin.TabularInline):
 
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(CreatedByModelAdminMixin):
 	list_display = [
 		'uuid',
 		'name',
 		'company',
 		'description',
 		'owner',
-		'id'
+		'id',
+		'created_by'
 	]
 	fields = [
 		'uuid',
@@ -25,10 +27,12 @@ class ProjectAdmin(admin.ModelAdmin):
 		'description',
 		'owner',
 		'base_url',
-		'id'
+		'id',
+		'created_by'
 	]
 	readonly_fields = [
 		'uuid',
-		'id'
+		'id',
+		'created_by'
 	]
 	inlines = [MembersInLine, ]

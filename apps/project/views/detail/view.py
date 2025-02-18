@@ -2,6 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.project.models import Members, Project
+from apps.project.serializers import ProjectDetailSerializerV1
 from utils import api
 
 
@@ -16,27 +17,7 @@ class ProjectDetailViewV1(APIView):
 				status=404,
 				message='Проект не найден'
 			)
-		project_members = (
-			Members.objects
-			.filter(project=project)
-			.order_by('-is_admin', 'user__first_name', 'user__last_name')
-			.select_related('user')
-		)
 
 		return api.response(
-			{
-				'uuid': project.uuid,
-				'name': project.name,
-				'description': project.description,
-				'owner': project.owner.fio,
-				'company': project.company.name,
-				'base_url': project.base_url,
-				'members': [
-					{
-						'user': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in project_members
-				]
-			}
+			ProjectDetailSerializerV1(project).data
 		)
