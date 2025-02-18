@@ -1,9 +1,12 @@
 import uuid
 
 from django.db import models
+from model_utils.models import TimeStampedModel
+from simple_history.models import HistoricalRecords
 
 
-class Members(models.Model):
+class Members(TimeStampedModel):
+	history = HistoricalRecords()
 
 	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Идентификатор')
 	project = models.ForeignKey('project.Project', on_delete=models.PROTECT, default=None, blank=True, null=True,

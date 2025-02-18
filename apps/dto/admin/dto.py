@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from apps.dto.models import DTO, Field
+from utils.admin_mixin import CreatedByModelAdminMixin
+from ..models import DTO, Field, Members
 
 
 class FieldsInLine(admin.TabularInline):
@@ -8,14 +9,20 @@ class FieldsInLine(admin.TabularInline):
 	extra = 0
 
 
+class MembersInLine(admin.TabularInline):
+	model = Members
+	extra = 0
+
+
 @admin.register(DTO)
-class DTOAdmin(admin.ModelAdmin):
+class DTOAdmin(CreatedByModelAdminMixin):
 	list_display = [
 		'uuid',
 		'name',
 		'project',
 		'description',
-		'id'
+		'id',
+		'created_by'
 	]
 	fields = [
 		'uuid',
@@ -23,11 +30,13 @@ class DTOAdmin(admin.ModelAdmin):
 		'project',
 		'description',
 		'base_url',
-		'id'
+		'id',
+		'created_by'
 	]
 	readonly_fields = [
 		'uuid',
-		'id'
+		'id',
+		'created_by'
 	]
 
-	inlines = [FieldsInLine,]
+	inlines = [FieldsInLine, MembersInLine]

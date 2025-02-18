@@ -1,8 +1,9 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from ...models import Members
+from ...models import Members, Project
 from utils import api
+from ...serializers import ProjectDetailSerializerV1
 
 
 class ProjectListViewV1(APIView):
@@ -10,26 +11,13 @@ class ProjectListViewV1(APIView):
 
 	def get(self, request):
 		company_uuid = request.query_params.get('company')
-		projects_member = (
+		projects_ids = (
 			Members.objects.filter(user=request.user, project__company__uuid=company_uuid)
 			.distinct('project')
-			.select_related('project', 'project__company', 'user')
+			.values_list('project_id', flat=True)
 		)
+		projects = Project.objects.filter(id__in=projects_ids)
 
 		return api.response(
-			[
-				{
-					'uuid': member.project.uuid,
-					'name': member.project.name,
-					'description': member.project.description,
-					'base_url': member.project.base_url,
-					'is_admin': member.is_admin,
-					'company': {
-						'uuid': member.project.company.uuid,
-						'name': member.project.company.name
-					},
-					'count_members': member.project.project_members.count()
-				}
-				for member in projects_member
-			]
+			ProjectDetailSerializerV1(projects, many=True).data
 		)

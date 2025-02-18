@@ -2,10 +2,13 @@ import uuid
 
 from django.db import models
 from model_utils import Choices
+from model_utils.models import TimeStampedModel
 from simple_history.models import HistoricalRecords
 
+from utils.model_mixin import CreatedByModelMixin
 
-class Pact(models.Model):
+
+class Pact(TimeStampedModel, CreatedByModelMixin):
 	METHOD_CHOICES = Choices(
 		(1, 'get', 'GET'),
 		(2, 'post', 'POST'),

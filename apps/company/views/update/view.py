@@ -6,6 +6,7 @@ from apps.user.models import User
 from utils import api
 from .serializer import CompanyUpdateQuerySerializer, CompanyMemberV1Serializer, CompanyChangeMemberV1Serializer
 from ...models import Members
+from ...serializers import CompanyDetailSerializerV1
 
 
 class CompanyUpdateNameViewV1(APIView):
@@ -33,18 +34,7 @@ class CompanyUpdateNameViewV1(APIView):
 		company.save()
 
 		return api.response(
-			{
-				'uuid': company.uuid,
-				'name': company.name,
-				'owner': company.owner.fio if company.owner else '',
-				'members': [
-					{
-						'name': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in company.company_members.all()
-				]
-			}
+			CompanyDetailSerializerV1(company).data
 		)
 
 
@@ -88,18 +78,7 @@ class CompanyChangeOwnerViewV1(APIView):
 		company.save()
 
 		return api.response(
-			{
-				'uuid': company.uuid,
-				'name': company.name,
-				'owner': company.owner.fio if company.owner else '',
-				'members': [
-					{
-						'name': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in company.company_members.all()
-				]
-			}
+			CompanyDetailSerializerV1(company).data
 		)
 
 
@@ -139,18 +118,7 @@ class CompanyAddMembersViewV1(APIView):
 		)
 
 		return api.response(
-			{
-				'uuid': company.uuid,
-				'name': company.name,
-				'owner': company.owner.fio if company.owner else '',
-				'members': [
-					{
-						'name': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in company.company_members.all()
-				]
-			}
+			CompanyDetailSerializerV1(company).data
 		)
 
 
@@ -198,18 +166,7 @@ class CompanyRemoveMembersViewV1(APIView):
 			)
 
 		return api.response(
-			{
-				'uuid': company.uuid,
-				'name': company.name,
-				'owner': company.owner.fio if company.owner else '',
-				'members': [
-					{
-						'name': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in company.company_members.all()
-				]
-			}
+			CompanyDetailSerializerV1(company).data
 		)
 
 
@@ -252,16 +209,5 @@ class CompanyChangeMemberPermissionViewV1(APIView):
 			)
 
 		return api.response(
-			{
-				'uuid': company.uuid,
-				'name': company.name,
-				'owner': company.owner.fio if company.owner else '',
-				'members': [
-					{
-						'name': member.user.fio,
-						'is_admin': member.is_admin
-					}
-					for member in company.company_members.all()
-				]
-			}
+			CompanyDetailSerializerV1(company).data
 		)
