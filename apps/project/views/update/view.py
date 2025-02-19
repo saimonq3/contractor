@@ -1,10 +1,13 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.company.models import Company
 from apps.user.models import User
 from utils import api
-from .serializers import ProjectUpdateInfoSerializerV1
+from .serializers import ProjectUpdateInfoSerializerV1, ProjectMemberQuerySerializer, \
+	ProjectRemoveOrChangeOwnerMemberQuerySerializer, ProjectChangeCompanyQuerySerializer
 from ...models import Project, Members
 from ...serializers import ProjectDetailSerializerV1
 
@@ -12,9 +15,21 @@ from ...serializers import ProjectDetailSerializerV1
 class ProjectAddMemberViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
-	def post(self, request, project_uuid):
+	@swagger_auto_schema(
+		request_body=ProjectMemberQuerySerializer,
+		operation_description='Добавить пользователя к проекту',
+		operation_summary='Добавить пользователя к проекту',
+		responses={200: ProjectDetailSerializerV1()}
+	)
+	def post(self, request, uuid):
+		query_serializer = ProjectMemberQuerySerializer(data=request.data)
+		if not query_serializer.is_valid():
+			return api.error_response(
+				status=400,
+				message=str(query_serializer.errors)
+			)
 		try:
-			project = Project.objects.get(uuid=project_uuid)
+			project = Project.objects.get(uuid=uuid)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -53,9 +68,21 @@ class ProjectAddMemberViewV1(APIView):
 class ProjectRemoveMemberViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
-	def post(self, request, project_uuid):
+	@swagger_auto_schema(
+		request_body=ProjectRemoveOrChangeOwnerMemberQuerySerializer,
+		operation_description='Убрать пользователя из проекта',
+		operation_summary='Убрать пользователя из проекта',
+		responses={200: ProjectDetailSerializerV1()}
+	)
+	def post(self, request, uuid):
+		query_serializer = ProjectRemoveOrChangeOwnerMemberQuerySerializer(data=request.data)
+		if not query_serializer.is_valid():
+			return api.error_response(
+				status=400,
+				message=str(query_serializer.errors)
+			)
 		try:
-			project = Project.objects.get(uuid=project_uuid)
+			project = Project.objects.get(uuid=uuid)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -92,9 +119,21 @@ class ProjectRemoveMemberViewV1(APIView):
 class ProjectChangeMemberPermissionViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
-	def post(self, request, project_uuid):
+	@swagger_auto_schema(
+		request_body=ProjectMemberQuerySerializer,
+		operation_description='Изменить права пользователя в проекту',
+		operation_summary='Изменить права пользователя в проекту',
+		responses = {200: ProjectDetailSerializerV1()}
+	)
+	def post(self, request, uuid):
+		query_serializer = ProjectMemberQuerySerializer(data=request.data)
+		if not query_serializer.is_valid():
+			return api.error_response(
+				status=400,
+				message=str(query_serializer.errors)
+			)
 		try:
-			project = Project.objects.get(uuid=project_uuid)
+			project = Project.objects.get(uuid=uuid)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -135,9 +174,16 @@ class ProjectChangeMemberPermissionViewV1(APIView):
 class ProjectUpdateInfoViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
-	def post(self, request, project_uuid):
+
+	@swagger_auto_schema(
+		request_body=ProjectUpdateInfoSerializerV1,
+		operation_description='Изменить информацию по проекту',
+		operation_summary='Изменить информацию по проекту',
+		responses={200: ProjectDetailSerializerV1()}
+	)
+	def post(self, request, uuid):
 		try:
-			project = Project.objects.get(uuid=project_uuid)
+			project = Project.objects.get(uuid=uuid)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -161,9 +207,21 @@ class ProjectUpdateInfoViewV1(APIView):
 class ProjectChangeCompanyViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
-	def post(self, request, project_uuid):
+	@swagger_auto_schema(
+		request_body=ProjectChangeCompanyQuerySerializer,
+		operation_description='Изменить компанию проекта(передать другой компании)',
+		operation_summary='Изменить компанию проекта(передать другой компании)',
+		responses={200: ProjectDetailSerializerV1()}
+	)
+	def post(self, request, uuid):
+		query_serializer = ProjectChangeCompanyQuerySerializer(data=request.data)
+		if not query_serializer.is_valid():
+			return api.error_response(
+				status=400,
+				message=str(query_serializer.errors)
+			)
 		try:
-			project = Project.objects.get(uuid=project_uuid)
+			project = Project.objects.get(uuid=uuid)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -178,7 +236,7 @@ class ProjectChangeCompanyViewV1(APIView):
 			)
 
 		try:
-			company = Company.objects.get(uuid=request.data.get('company'))
+			company = Company.objects.get(uuid=request.data.get('company_uuid'))
 		except Company.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -203,9 +261,15 @@ class ProjectChangeCompanyViewV1(APIView):
 class ProjectChangeOwnerViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
-	def post(self, request, project_uuid):
+	@swagger_auto_schema(
+		request_body=ProjectRemoveOrChangeOwnerMemberQuerySerializer,
+		operation_description='Поменять владельца проекта',
+		operation_summary='Поменять владельца проекта',
+		responses={200: ProjectDetailSerializerV1()}
+	)
+	def post(self, request, uuid):
 		try:
-			project = Project.objects.get(uuid=project_uuid)
+			project = Project.objects.get(uuid=uuid)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,

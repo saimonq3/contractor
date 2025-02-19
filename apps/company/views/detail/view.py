@@ -1,14 +1,20 @@
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
-from utils import api
 from rest_framework.views import APIView
 
-from ...serializers import CompanyDetailSerializerV1
+from utils import api
 from ...models import Company
+from ...serializers import CompanyDetailSerializerV1
 
 
 class CompanyDetailViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
+	@swagger_auto_schema(
+		operation_description='Инофрмация по компании',
+		operation_summary='Информация по компании',
+		responses={200: CompanyDetailSerializerV1()}
+	)
 	def get(self, request, uuid):
 		try:
 			company = Company.objects.get(uuid=uuid)

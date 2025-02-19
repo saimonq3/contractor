@@ -1,4 +1,5 @@
 from django.db import transaction
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -13,6 +14,11 @@ class CompanyUpdateNameViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
 	@transaction.atomic
+	@swagger_auto_schema(
+		request_body=CompanyUpdateQuerySerializer,
+		operation_description='Изменить название компании',
+		operation_summary='Изменить название компании'
+	)
 	def post(self, request, uuid):
 		query_serializer = CompanyUpdateQuerySerializer(data=request.data)
 		if not query_serializer.is_valid():
@@ -42,6 +48,11 @@ class CompanyChangeOwnerViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
 	@transaction.atomic
+	@swagger_auto_schema(
+		request_body=CompanyMemberV1Serializer,
+		operation_description='Изменить владельца компании',
+		operation_summary='Изменить владельца компании'
+	)
 	def post(self, request, uuid):
 		query_serializer = CompanyMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
@@ -85,6 +96,12 @@ class CompanyChangeOwnerViewV1(APIView):
 class CompanyAddMembersViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
+	@transaction.atomic
+	@swagger_auto_schema(
+		request_body=CompanyChangeMemberV1Serializer,
+		operation_description='Добавить пользователя в компанию',
+		operation_summary='Добавить пользователя в компанию'
+	)
 	def post(self, request, uuid):
 		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
@@ -98,11 +115,12 @@ class CompanyAddMembersViewV1(APIView):
 		except Members.DoesNotExist:
 			return api.error_response(
 				status=404,
+				code=404,
 				message='Компания не найдена или у вас нет прав на ее изменение'
 			)
 
 		try:
-			user = User.objects.get(uuid=request.data.get('uuid'))
+			user = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -125,6 +143,12 @@ class CompanyAddMembersViewV1(APIView):
 class CompanyRemoveMembersViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
+	@transaction.atomic
+	@swagger_auto_schema(
+		request_body=CompanyChangeMemberV1Serializer,
+		operation_description='Убрать пользователя из компании',
+		operation_summary='Убрать пользователя из компании'
+	)
 	def post(self, request, uuid):
 		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
@@ -142,7 +166,7 @@ class CompanyRemoveMembersViewV1(APIView):
 			)
 
 		try:
-			user = User.objects.get(uuid=request.data.get('uuid'))
+			user = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -173,6 +197,12 @@ class CompanyRemoveMembersViewV1(APIView):
 class CompanyChangeMemberPermissionViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
+	@transaction.atomic
+	@swagger_auto_schema(
+		request_body=CompanyChangeMemberV1Serializer,
+		operation_description='Изменить права пользователя в компании',
+		operation_summary='Изменить права пользователя в компании'
+	)
 	def post(self, request, uuid):
 		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
@@ -190,7 +220,7 @@ class CompanyChangeMemberPermissionViewV1(APIView):
 			)
 
 		try:
-			user = User.objects.get(uuid=request.data.get('uuid'))
+			user = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
 			return api.error_response(
 				status=404,

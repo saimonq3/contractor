@@ -1,12 +1,13 @@
 from django.db import transaction
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.company.models import Members as CompanyMembers
-from utils.models import normalize_base_url
-from ...models import Project, Members as ProjectMembers
-from .serializers import ProjectCreateV1RequestQuery
 from utils import api
+from utils.models import normalize_base_url
+from .serializers import ProjectCreateV1RequestQuery
+from ...models import Project, Members as ProjectMembers
 from ...serializers import ProjectDetailSerializerV1
 
 
@@ -14,6 +15,12 @@ class ProjectCreateViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
 	@transaction.atomic
+	@swagger_auto_schema(
+		request_body=ProjectCreateV1RequestQuery,
+		operation_description='Создать проект',
+		operation_summary='Создать проект',
+		responses={200: ProjectDetailSerializerV1()}
+	)
 	def post(self, request, company_uuid):
 		check_request_query = ProjectCreateV1RequestQuery(data=request.data)
 		if not check_request_query.is_valid():

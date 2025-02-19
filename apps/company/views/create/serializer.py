@@ -4,7 +4,7 @@ from ...models import Company
 
 
 class CompanyCreateV1RequestQuery(serializers.Serializer):
-	name = serializers.CharField()
+	name = serializers.CharField(help_text='Название компании')
 
 
 class CompanyCreateSerializerV1(serializers.ModelSerializer):

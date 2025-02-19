@@ -6,9 +6,9 @@ from ..company.serializers import CompanyDetailSerializerV1
 
 
 class ProjectDetailSerializerV1(serializers.ModelSerializer):
-	owner = UserSerializerV1()
-	members = MembersSerializerV1(many=True, source='project_members')
-	company = CompanyDetailSerializerV1()
+	owner = UserSerializerV1(help_text='Владелец проекта')
+	members = MembersSerializerV1(many=True, source='project_members', help_text='Участники проекта')
+	company = CompanyDetailSerializerV1(help_text='Компания')
 
 	class Meta:
 		model = Project

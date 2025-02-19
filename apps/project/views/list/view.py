@@ -1,3 +1,6 @@
+from tarfile import TruncatedHeaderError
+
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -9,6 +12,11 @@ from ...serializers import ProjectDetailSerializerV1
 class ProjectListViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
 
+	@swagger_auto_schema(
+		operation_description='Получить список проектов в которых учавствует пользователь',
+		operation_summary='Получить список проектов в которых учавствует пользователь',
+		responses={200: ProjectDetailSerializerV1(many=True)}
+	)
 	def get(self, request):
 		company_uuid = request.query_params.get('company')
 		projects_ids = (
