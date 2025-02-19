@@ -1,0 +1,1 @@
+from .view import ListDTOV1View as list_dto_v1

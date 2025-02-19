@@ -2,10 +2,13 @@ import uuid
 
 from django.db import models
 from model_utils import Choices
+from model_utils.models import TimeStampedModel
 from simple_history.models import HistoricalRecords
 
+from utils.model_mixin import CreatedByModelMixin
 
-class Field(models.Model):
+
+class Field(TimeStampedModel, CreatedByModelMixin):
     TYPE = Choices(
         (1, 'int', 'Integer'),
         (2, 'str', 'String'),

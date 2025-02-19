@@ -1,10 +1,13 @@
 import uuid
 
 from django.db import models
+from model_utils.models import TimeStampedModel
 from simple_history.models import HistoricalRecords
 
+from utils.model_mixin import CreatedByModelMixin
 
-class DTO(models.Model):
+
+class DTO(TimeStampedModel, CreatedByModelMixin):
 	history = HistoricalRecords()
 
 	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Идентификатор')
@@ -20,3 +23,4 @@ class DTO(models.Model):
 	class Meta:
 		verbose_name = 'ДТО'
 		verbose_name_plural = 'ДТО'
+		unique_together = ['project', 'name']

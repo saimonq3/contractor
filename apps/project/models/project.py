@@ -1,9 +1,14 @@
 import uuid
 
 from django.db import models
+from model_utils.models import TimeStampedModel
+from simple_history.models import HistoricalRecords
+
+from utils.model_mixin import CreatedByModelMixin
 
 
-class Project(models.Model):
+class Project(TimeStampedModel, CreatedByModelMixin):
+    history = HistoricalRecords()
 
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Идентификатор')
     name = models.CharField(max_length=128)
@@ -13,7 +18,7 @@ class Project(models.Model):
     base_url = models.CharField(max_length=128, default=None, blank=True, null=True, verbose_name='Базовый URL проекта')
 
     def __str__(self):
-        return f'{self.name}__{self.company}'
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'Проект'

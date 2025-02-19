@@ -1,7 +1,13 @@
 from django.db import models
+from model_utils.models import TimeStampedModel
+from simple_history.models import HistoricalRecords
+
+from utils.model_mixin import CreatedByModelMixin
 
 
-class Header(models.Model):
+class Header(TimeStampedModel, CreatedByModelMixin):
+	history = HistoricalRecords()
+
 	pact = models.ForeignKey('pact.Pact', on_delete=models.CASCADE, related_name='headers')
 	key = models.CharField(max_length=64)
 	value = models.CharField(max_length=1024)
@@ -12,3 +18,4 @@ class Header(models.Model):
 	class Meta:
 		verbose_name = 'Заголовок'
 		verbose_name_plural = 'Заголовки'
+		unique_together = ['key', 'value', 'pact']

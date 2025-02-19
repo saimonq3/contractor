@@ -11,7 +11,7 @@ urlpatterns = [
     path('api/pact/', include('apps.pact.urls')),
     path('api/company/', include(company_view.urls)),
     path('api/project/', include('apps.project.views.urls')),
-    path('api/dto/', include('apps.dto.urls')),
+    path('api/dto/', include('apps.dto.views.urls')),
     path('explorer/', include('explorer.urls')),
 ]
 
