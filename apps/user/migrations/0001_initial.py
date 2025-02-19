@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('username', models.CharField(max_length=32, unique=True, db_index=True)),
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, null=True, unique=True, verbose_name='UUID')),
-                ('email', models.EmailField(db_index=True, max_length=254, unique=True, verbose_name='email')),
+                ('email', models.EmailField(db_index=True, max_length=254, unique=True, default=None, blank=True, null=True, verbose_name='email')),
                 ('email_verified', models.BooleanField(default=False, verbose_name='Email верифицирован')),
                 ('first_name', models.CharField(max_length=200, verbose_name='Имя')),
                 ('last_name', models.CharField(max_length=200, verbose_name='Фамилия')),
