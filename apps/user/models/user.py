@@ -28,7 +28,7 @@ class User(AbstractUser):
 	username = models.CharField(max_length=32, unique=True, db_index=True)
 
 	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='UUID')
-	email = models.EmailField(blank=True, null=True, unique=True, default=None, db_index=True, verbose_name=_('email'))
+	email = models.EmailField(blank=True, null=True, default=None, db_index=True, verbose_name=_('email'))
 	email_verified = models.BooleanField(default=False, verbose_name='Email верифицирован')
 	first_name = models.CharField(max_length=200, verbose_name='Имя')
 	last_name = models.CharField(max_length=200, verbose_name='Фамилия')

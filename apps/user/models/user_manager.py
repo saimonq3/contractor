@@ -8,6 +8,10 @@ class UserAccountManager(BaseUserManager):
 		if not password:
 			raise ValueError('Password must be provided')
 
+		if email := extra_fields.get('email'):
+			if self.filter(email=email).exists():
+				raise ValueError('Email already register')
+
 		user = self.model(username=username, phone_number=phone_number, **extra_fields)
 		user.set_password(password)
 		user.save(using=self._db)
