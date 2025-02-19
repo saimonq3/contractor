@@ -18,18 +18,17 @@ def user_avatar__upload_to(instance, filename):
 
 
 class User(AbstractUser):
-	REQUIRED_FIELDS = ['phone_number', ]
-	USERNAME_FIELD = 'email'
+	USERNAME_FIELD = 'username'
 
 	SEX = Choices(
 		('W', 'Женский'),
 		('M', 'Мужской')
 	)
 
-	username = models.CharField(max_length=32, default=None, blank=True, null=True)
+	username = models.CharField(max_length=32, unique=True, db_index=True)
 
-	uuid = models.UUIDField(unique=True, null=True, default=uuid.uuid4, editable=False, verbose_name='UUID')
-	email = models.EmailField(blank=False, unique=True, db_index=True, verbose_name=_('email'))
+	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='UUID')
+	email = models.EmailField(blank=True, null=True, unique=True, default=None, db_index=True, verbose_name=_('email'))
 	email_verified = models.BooleanField(default=False, verbose_name='Email верифицирован')
 	first_name = models.CharField(max_length=200, verbose_name='Имя')
 	last_name = models.CharField(max_length=200, verbose_name='Фамилия')
