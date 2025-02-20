@@ -1,8 +1,6 @@
 services:
   app:
-    image: docker.tolq3.ru/contractor:${SERVER}-latest
-    build:
-      context: .
+    image: docker.tolq3.ru/contractor:main-latest
     command: >
       sh -c "python manage.py collectstatic --noinput && 
       python manage.py migrate && gunicorn contractor.wsgi:application --bind 0.0.0.0:8000"

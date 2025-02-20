@@ -1,5 +1,6 @@
 from django.contrib import admin
-from apps.pact.models import Pact, QueryParams, Header
+
+from ..models import Pact, QueryParams, Header
 from utils.admin_mixin import CreatedByModelAdminMixin
 
 
@@ -22,7 +23,8 @@ class PactAdmin(CreatedByModelAdminMixin):
 	list_display = [
 		'uuid',
 		'method',
-		'created_by'
+		'created_by',
+		'directory'
 	]
 	fields = [
 		'uuid',
@@ -30,7 +32,8 @@ class PactAdmin(CreatedByModelAdminMixin):
 		'method',
 		'base_url',
 		'body',
-		'created_by'
+		'created_by',
+		'directory'
 	]
 
 	readonly_fields = [

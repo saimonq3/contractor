@@ -6,7 +6,11 @@ from os import getenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = getenv('SECRET_KEY')
+SERVER = os.getenv('DEBUG')
 DEBUG = True
+
+if SERVER == 'prod':
+    DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -19,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'treebeard',
     'explorer',
     'rest_framework.authtoken',
     'rangefilter',

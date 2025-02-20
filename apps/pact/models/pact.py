@@ -29,6 +29,7 @@ class Pact(TimeStampedModel, CreatedByModelMixin):
 	base_url = models.CharField(max_length=1024, default=None, blank=True, null=True,
 	                            verbose_name='Базовый URL запроса')
 	body = models.TextField(default=None, blank=True, null=True, verbose_name='Тело запроса')
+	directory = models.ForeignKey('pact.Directory', on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='pacts')
 
 	@property
 	def get_query_params(self):
