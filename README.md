@@ -82,11 +82,14 @@ docker-compose exec -it app ./manage.py createsuperuser
 - Swagger: Просмотр какие есть доступные конечные точки
 - Админ-панель: На текущий момент пока что стандартная панель `Django-admin`
 
-Так же доступна demo версия бекенда по адресу: https://contractor.tolq3.ru/admin
+Так же доступна demo версия: [Admin](https://contractor.tolq3.ru/admin)
 
-login: demo
+**login**: demo
 
-password: 12345
+**password**: 12345
+
+
+Документация API: [Swagger](https://contractor.tolq3.ru/docs/swagger/) или [Redoc](https://contractor.tolq3.ru/docs/redoc/) 
 
 Все что будет внесено в demo версии со временем может быть утерянно. Импользовать только для ознакомления
 
