@@ -11,24 +11,24 @@ class LoginV1Test(APITestCase):
 
 	def test_register(self):
 		user1 = {
-			'email': 'test_user1@mail.ru',
+			'username': 'test_user1',
 			'password': 'TesT!Passwd1'
 		}
 
 		user2 = {
-			'email': 'test_user2@mail.ru',
+			'username': 'test_user2',
 			'password': 'TesT!Passwd1',
 			'phone_number': '+71234567890'
 		}
 
 		user3 = {
-			'email': 'test_user3@mail.ru',
+			'username': 'test_user3',
 			'password': 'TesT!Passwd1',
 			'phone_number': '+71234567890'
 		}
 
 		user4 = {
-			'email': 'test_user2@mail.ru',
+			'username': 'test_user2',
 			'password': 'TesT!Passwd1',
 			'phone_number': '+71234567890'
 		}
@@ -44,7 +44,7 @@ class LoginV1Test(APITestCase):
 		self.assertEqual(200, response1.status_code)
 		self.assertEqual(
 			{
-				'email': 'test_user1@mail.ru',
+				'username': 'test_user1',
 			},
 			response1.data
 		)
@@ -55,7 +55,7 @@ class LoginV1Test(APITestCase):
 		self.assertEqual(200, response2.status_code)
 		self.assertEqual(
 			{
-				'email': 'test_user2@mail.ru',
+				'username': 'test_user2',
 				'phone_number': '+71234567890'
 			},
 			response2.data
@@ -74,14 +74,14 @@ class LoginV1Test(APITestCase):
 			response3.data
 		)
 
-		# Проверяем что будет ошибка при попытке зарегистрировать пользователя по уже существующим email и номеру телефона
+		# Проверяем что будет ошибка при попытке зарегистрировать пользователя по уже существующим username
 		request4 = self.factory.post('/', data=user4, format='json')
 		response4 = RegisterUser.as_view()(request4)
 		self.assertEqual(400, response4.status_code)
 		self.assertEqual(
 			{
-				"email": [
-					"Пользователь с таким email уже существует."
+				"username": [
+					"Пользователь с таким username уже существует."
 				],
 				"phone_number": [
 					"Пользователь с таким phone_number уже существует."
@@ -90,11 +90,11 @@ class LoginV1Test(APITestCase):
 			response4.data
 		)
 
-		# Проверяем что будет ошибка при попытке зарегистрировать без email
+		# Проверяем что будет ошибка при попытке зарегистрировать без username
 		request5 = self.factory.post('/', data=user5, format='json')
 		response5 = RegisterUser.as_view()(request5)
 		self.assertEqual(400, response5.status_code)
-		self.assertEqual({'email': ['Обязательное поле.']}, response5.data)
+		self.assertEqual({'username': ['Обязательное поле.']}, response5.data)
 
 		# Проверяем что зарегистрировалось 2 пользователя
 		self.assertEqual(User.objects.count(), 2)

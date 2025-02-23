@@ -7,8 +7,8 @@ from .view import LoginView
 class LoginV1Test(APITestCase):
 	@classmethod
 	def setUpTestData(cls):
-		cls.user = User.objects.create(email='test@test.ru', phone_number='+71234567890')
-		cls.test_user = User.objects.create(email='test_user@test.ru', phone_number='+70987654321')
+		cls.user = User.objects.create(username='test', phone_number='+71234567890')
+		cls.test_user = User.objects.create(username='test_user', phone_number='+70987654321')
 		cls.password = 'TesT!Passwd123'
 
 	def setUp(self):
@@ -19,7 +19,7 @@ class LoginV1Test(APITestCase):
 		self.test_user.save()
 
 		data = {
-			'email': self.test_user.email,
+			'username': self.test_user.username,
 			'password': self.password
 		}
 
@@ -29,7 +29,7 @@ class LoginV1Test(APITestCase):
 		self.assertEqual(200, response.status_code)
 		self.assertIn('token', response.data.keys())
 		self.assertEqual(
-			User.objects.get(email=self.test_user.email).auth_token.__str__(),
+			User.objects.get(username=self.test_user.username).auth_token.__str__(),
 			response.data.get('token')
 		)
 
@@ -38,7 +38,7 @@ class LoginV1Test(APITestCase):
 		self.test_user.save()
 
 		data = {
-			'email': self.test_user.email,
+			'username': self.test_user.username,
 			'password': 'WrongPassword'
 		}
 

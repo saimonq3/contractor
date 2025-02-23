@@ -1,0 +1,1 @@
+from .view import UserProfile as user_profile_v1
