@@ -10,8 +10,10 @@ class UserProfile(APIView):
 
 
 	def get(self, request):
+		"""
+		Просмотр профиля пользователя
+		"""
 		user = request.user
 		serializer = ProfileSerializer(user)
-
 		return api.response(serializer.data)
 
