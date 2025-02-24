@@ -24,7 +24,8 @@ class CompanyCreateViewV1(GenericAPIView):
 		if not check_request_query.is_valid():
 			return api.error_response(
 				status=400,
-				message=str(check_request_query.errors)
+				message=str(check_request_query.errors),
+				user_message='Не корректные данные запроса'
 			)
 
 		# В случае если пользователь пытается создать компанию которая уже есть, то вернем ее без ошибок
