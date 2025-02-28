@@ -61,6 +61,7 @@ services:
 volumes:
   app-volume:
 ```
+Либо можно использовать команды ```docker run -p 8000:8000 -v ${PWD}/.env:/app/.env docker.tolq3.ru/contractor:main-latest gunicorn contractor.wsgi:application --bind 0.0.0.0:8000```
 5. Запустите проект с помощью команды:
 ```bash 
 docker-compose up -d
