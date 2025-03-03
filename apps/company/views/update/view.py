@@ -71,7 +71,7 @@ class CompanyChangeOwnerViewV1(APIView):
 
 		company = company_admin.company
 		try:
-			new_owner = User.objects.get(uuid=request.data.get('user'))
+			new_owner = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -87,6 +87,11 @@ class CompanyChangeOwnerViewV1(APIView):
 			)
 		company.owner = new_owner
 		company.save()
+
+		# TODO Передлать на сервис. Написать отдельный сервис для смены привелегий пользвоателя в компании
+		new_owner_set_is_admin = Members.objects.get(company=company, user=new_owner)
+		new_owner_set_is_admin.is_admin = True
+		new_owner_set_is_admin.save()
 
 		return api.response(
 			CompanyDetailSerializerV1(company).data
@@ -232,6 +237,7 @@ class CompanyChangeMemberPermissionViewV1(APIView):
 		try:
 			member = Members.objects.get(user=user, company=company)
 			member.is_admin = request.data.get('is_admin')
+			member.save()
 		except Members.DoesNotExist:
 			return api.error_response(
 				status=404,

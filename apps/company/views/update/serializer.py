@@ -10,4 +10,4 @@ class CompanyMemberV1Serializer(serializers.Serializer):
 
 class CompanyChangeMemberV1Serializer(serializers.Serializer):
 	user_uuid = serializers.UUIDField(help_text='UUID пользователя')
-	is_admin = serializers.BooleanField(help_text='Является администратором')
+	is_admin = serializers.BooleanField(required=False, help_text='Является администратором')
