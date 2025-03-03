@@ -5,13 +5,15 @@ from rest_framework.views import APIView
 
 from apps.user.models import User
 from utils import api
+from utils.permissions import ChangeCompanyPermission
 from .serializer import CompanyUpdateQuerySerializer, CompanyMemberV1Serializer, CompanyChangeMemberV1Serializer
-from ...models import Members
+from ...models import Members, Company
 from ...serializers import CompanyDetailSerializerV1
 
 
 class CompanyUpdateNameViewV1(APIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ChangeCompanyPermission]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@transaction.atomic
 	@swagger_auto_schema(
@@ -26,16 +28,10 @@ class CompanyUpdateNameViewV1(APIView):
 				status=400,
 				message=str(query_serializer.errors)
 			)
-
 		try:
-			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
-		except Members.DoesNotExist:
-			return api.error_response(
-				status=404,
-				message='Компания не найдена или у вас нет прав на ее изменение'
-			)
-
-		company = company_admin.company
+			company = Company.objects.get(uuid=uuid, deleted=False)
+		except Company.DoesNotExist:
+			return api.error_response(status=404, message='Компания не найдена')
 		company.name = request.data.get('name')
 		company.save()
 
@@ -45,7 +41,8 @@ class CompanyUpdateNameViewV1(APIView):
 
 
 class CompanyChangeOwnerViewV1(APIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ChangeCompanyPermission, ]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@transaction.atomic
 	@swagger_auto_schema(
@@ -60,16 +57,10 @@ class CompanyChangeOwnerViewV1(APIView):
 				status=400,
 				message=str(query_serializer.errors)
 			)
-
 		try:
-			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
-		except Members.DoesNotExist:
-			return api.error_response(
-				status=404,
-				message='Компания не найдена или у вас нет прав на ее изменение'
-			)
-
-		company = company_admin.company
+			company = Company.objects.get(uuid=uuid, deleted=False)
+		except Company.DoesNotExist:
+			return api.error_response(status=404, message='Компания не найдена')
 		try:
 			new_owner = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
@@ -99,7 +90,8 @@ class CompanyChangeOwnerViewV1(APIView):
 
 
 class CompanyAddMembersViewV1(APIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ChangeCompanyPermission, ]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@transaction.atomic
 	@swagger_auto_schema(
@@ -116,15 +108,6 @@ class CompanyAddMembersViewV1(APIView):
 			)
 
 		try:
-			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
-		except Members.DoesNotExist:
-			return api.error_response(
-				status=404,
-				code=404,
-				message='Компания не найдена или у вас нет прав на ее изменение'
-			)
-
-		try:
 			user = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
 			return api.error_response(
@@ -132,7 +115,10 @@ class CompanyAddMembersViewV1(APIView):
 				message='Пользователь не найден'
 			)
 
-		company = company_admin.company
+		try:
+			company = Company.objects.get(uuid=uuid, deleted=False)
+		except Company.DoesNotExist:
+			return api.error_response(status=404, message='Компания не найдена')
 
 		Members.objects.create(
 			company=company,
@@ -146,7 +132,8 @@ class CompanyAddMembersViewV1(APIView):
 
 
 class CompanyRemoveMembersViewV1(APIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ChangeCompanyPermission, ]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@transaction.atomic
 	@swagger_auto_schema(
@@ -163,14 +150,6 @@ class CompanyRemoveMembersViewV1(APIView):
 			)
 
 		try:
-			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
-		except Members.DoesNotExist:
-			return api.error_response(
-				status=404,
-				message='Компания не найдена или у вас нет прав на ее изменение'
-			)
-
-		try:
 			user = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
 			return api.error_response(
@@ -178,13 +157,16 @@ class CompanyRemoveMembersViewV1(APIView):
 				message='Пользователь не найден'
 			)
 
-		if user == company_admin.user:
+		try:
+			company = Company.objects.get(uuid=uuid, deleted=False)
+		except Company.DoesNotExist:
+			return api.error_response(status=404, message='Компания не найдена')
+
+		if user == Members.objects.get(user=request.user, company=company).user:
 			return api.error_response(
 				status=404,
 				message='Польователь не может удалить сам себя'
 			)
-
-		company = company_admin.company
 
 		try:
 			Members.objects.get(user=user, company=company).delete()
@@ -200,7 +182,8 @@ class CompanyRemoveMembersViewV1(APIView):
 
 
 class CompanyChangeMemberPermissionViewV1(APIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ChangeCompanyPermission, ]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@transaction.atomic
 	@swagger_auto_schema(
@@ -217,14 +200,6 @@ class CompanyChangeMemberPermissionViewV1(APIView):
 			)
 
 		try:
-			company_admin = Members.objects.get(company__uuid=uuid, user=request.user, is_admin=True)
-		except Members.DoesNotExist:
-			return api.error_response(
-				status=404,
-				message='Компания не найдена или у вас нет прав на ее изменение'
-			)
-
-		try:
 			user = User.objects.get(uuid=request.data.get('user_uuid'))
 		except User.DoesNotExist:
 			return api.error_response(
@@ -232,7 +207,10 @@ class CompanyChangeMemberPermissionViewV1(APIView):
 				message='Пользователь не найден'
 			)
 
-		company = company_admin.company
+		try:
+			company = Company.objects.get(uuid=uuid, deleted=False)
+		except Company.DoesNotExist:
+			return api.error_response(status=404, message='Компания не найдена')
 
 		try:
 			member = Members.objects.get(user=user, company=company)

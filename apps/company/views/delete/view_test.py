@@ -31,14 +31,14 @@ class CompanyDeleteTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyDeleteViewV1().as_view()(request, self.company_1.uuid)
+		response = CompanyDeleteViewV1().as_view()(request, uuid=str(self.company_1.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
 
-		self.assertEqual(response['result'], 'ok')
-		self.assertEqual(Company.objects.count(), 1)
-		self.assertEqual(Company.objects.filter(uuid=self.company_1.uuid).exists(), False)
+		self.assertEqual(response['results'], 'ok')
+		self.assertEqual(Company.objects.filter(deleted=False).count(), 1)
+		self.assertEqual(Company.objects.filter(uuid=self.company_1.uuid, deleted=False).exists(), False)
 
 	def test_fail_delete(self):
 		request = self.factory.delete(
@@ -51,7 +51,7 @@ class CompanyDeleteTest(TestCase):
 
 		response = CompanyDeleteViewV1().as_view()(request, self.company_1.uuid)
 
-		self.assertEqual(404, response.status_code)
+		self.assertEqual(403, response.status_code)
 
 		self.assertEqual(Company.objects.count(), 2)
 		self.assertEqual(Company.objects.filter(uuid=self.company_1.uuid).exists(), True)
@@ -67,7 +67,7 @@ class CompanyDeleteTest(TestCase):
 
 		response = CompanyDeleteViewV1().as_view()(request, self.company_2.uuid)
 
-		self.assertEqual(404, response.status_code)
+		self.assertEqual(403, response.status_code)
 
 		self.assertEqual(Company.objects.count(), 2)
 		self.assertEqual(Company.objects.filter(uuid=self.company_1.uuid).exists(), True)

@@ -31,6 +31,6 @@ class ProjectDetailTestV1(TestCase):
 		self.assertEqual(200, response.status_code)
 		response = response.data
 
-		self.assertEqual(response['result']['uuid'], str(self.project.uuid))
-		self.assertEqual(response['result']['name'], self.project.name)
-		self.assertEqual(response['result']['owner']['fio'], self.user.fio)
+		self.assertEqual(response['results']['uuid'], str(self.project.uuid))
+		self.assertEqual(response['results']['name'], self.project.name)
+		self.assertEqual(response['results']['owner']['fio'], self.user.fio)

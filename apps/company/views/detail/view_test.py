@@ -39,10 +39,10 @@ class CompanyDetailTest(TestCase):
 		self.assertEqual(200, response.status_code)
 		response = response.data
 
-		self.assertEqual(response['result']['uuid'], str(self.company.uuid))
-		self.assertEqual(response['result']['name'], self.company.name)
-		self.assertEqual(response['result']['owner']['fio'], self.user.fio)
-		self.assertEqual(response['result']['members'][0]['is_admin'], True)
+		self.assertEqual(response['results']['uuid'], str(self.company.uuid))
+		self.assertEqual(response['results']['name'], self.company.name)
+		self.assertEqual(response['results']['owner']['fio'], self.user.fio)
+		self.assertEqual(response['results']['members'][0]['is_admin'], True)
 
 	def test_not_found_detail(self):
 		request = self.factory.get('/')
@@ -53,4 +53,4 @@ class CompanyDetailTest(TestCase):
 
 		response = CompanyDetailViewV1().as_view()(request, uuid=uuid.uuid4())
 
-		self.assertEqual(404, response.status_code)
+		self.assertEqual(403, response.status_code)

@@ -9,6 +9,7 @@ from ...serializers import CompanyListSerializerV1
 
 class CompanyListViewV1(APIView):
 	permission_classes = [IsAuthenticated, ]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@swagger_auto_schema(
 	operation_description = 'Получить список компаний в которых пользователь - сотрудник',
@@ -17,7 +18,7 @@ class CompanyListViewV1(APIView):
 	)
 	def get(self, request):
 		queryset = Members.objects.filter(user=request.user).values_list('company_id', flat=True)
-		company = Company.objects.filter(id__in=queryset)
+		company = Company.objects.filter(id__in=queryset, deleted=False)
 		return api.response(
 			CompanyListSerializerV1(company, many=True).data
 		)

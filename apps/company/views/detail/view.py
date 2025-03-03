@@ -3,12 +3,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from utils import api
+from utils.permissions import ReadOnlyCompanyPermission
 from ...models import Company
 from ...serializers import CompanyDetailSerializerV1
 
 
 class CompanyDetailViewV1(APIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ReadOnlyCompanyPermission, ]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@swagger_auto_schema(
 		operation_description='Инофрмация по компании',
@@ -17,7 +19,7 @@ class CompanyDetailViewV1(APIView):
 	)
 	def get(self, request, uuid):
 		try:
-			company = Company.objects.get(uuid=uuid)
+			company = Company.objects.get(uuid=uuid, deleted=False)
 		except Company.DoesNotExist:
 			return api.error_response(message='Компания не найдена', status=404)
 

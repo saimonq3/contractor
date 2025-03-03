@@ -16,13 +16,13 @@ class ProjectListViewV1(APIView):
 		responses={200: ProjectDetailSerializerV1(many=True)}
 	)
 	def get(self, request):
-		company_uuid = request.query_params.get('company')
+		company_uuid = request.query_params.get('company_uuid')
 		projects_ids = (
 			Members.objects.filter(user=request.user, project__company__uuid=company_uuid)
 			.distinct('project')
 			.values_list('project_id', flat=True)
 		)
-		projects = Project.objects.filter(id__in=projects_ids)
+		projects = Project.objects.filter(id__in=projects_ids, company__deleted=False)
 
 		return api.response(
 			ProjectDetailSerializerV1(projects, many=True).data

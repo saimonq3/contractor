@@ -15,6 +15,7 @@ class Company(TimeStampedModel, CreatedByModelMixin):
 	name = models.CharField(max_length=128)
 	owner = models.ForeignKey('user.User', on_delete=models.PROTECT, default=None, null=True, blank=True,
 							  related_name='company_owner')
+	deleted = models.BooleanField(default=False, verbose_name='Удалена')
 
 
 	def __str__(self):

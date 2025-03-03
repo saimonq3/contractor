@@ -28,7 +28,7 @@ class ApiJSONEncoder(DjangoJSONEncoder):
 
 class JsonRenderer(DrfJsonResponse):
 	def render(self, data, *args, **kwargs):
-		data = {'result': data}
+		data = {'results': data}
 		return super().render(data, *args, **kwargs)
 
 
@@ -36,7 +36,7 @@ def response(result):
 	"""
 	Успешный ответ API.
 	"""
-	body = {'result': result}
+	body = {'results': result}
 	return Response(body, status=200)
 
 
@@ -57,6 +57,6 @@ def error_response(tag=None, message=None, user_message=None, data=None, *, code
 		error['data'] = data
 
 	body = {
-		'result': {'error': error}
+		'results': {'error': error}
 	}
 	return JsonErrorResponse(body, status=status)

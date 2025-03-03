@@ -35,7 +35,7 @@ class CompanyCreateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = ProjectCreateViewV1().as_view()(request, self.company_1.uuid)
+		response = ProjectCreateViewV1().as_view()(request, company_uuid=str(self.company_1.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -47,8 +47,8 @@ class CompanyCreateTest(TestCase):
 		self.assertEqual(project.project_members.filter(user=self.user_1, is_admin=True).exists(), True)
 		self.assertEqual(project.project_members.filter(user=self.user_2, is_admin=False).exists(), True)
 
-		self.assertEqual(response['result']['uuid'], str(project.uuid))
-		self.assertEqual(response['result']['company']['uuid'], str(self.company_1.uuid))
+		self.assertEqual(response['results']['uuid'], str(project.uuid))
+		self.assertEqual(response['results']['company']['uuid'], str(self.company_1.uuid))
 
 	def test_fail_create(self):
 		request = self.factory.post(

@@ -46,7 +46,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request_admin_user, self.user_1)
 
-		response_1 = CompanyUpdateNameViewV1().as_view()(request_admin_user, self.company.uuid)
+		response_1 = CompanyUpdateNameViewV1().as_view()(request_admin_user, uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response_1.status_code)
 		response = response_1.data
@@ -60,11 +60,11 @@ class CompanyUpdateTest(TestCase):
 		self.assertEqual(Company.objects.count(), 1)
 
 		# Смотрим что вьюха вернула правильные данные
-		self.assertEqual(response['result']['uuid'], str(self.company.uuid))
-		self.assertEqual(response['result']['name'], self.company.name)
-		self.assertEqual(response['result']['owner']['fio'], self.user_1.fio)
+		self.assertEqual(response['results']['uuid'], str(self.company.uuid))
+		self.assertEqual(response['results']['name'], self.company.name)
+		self.assertEqual(response['results']['owner']['fio'], self.user_1.fio)
 		self.assertEqual(
-			response['result']['members'],
+			response['results']['members'],
 			[
 				{'user': {'fio': self.user_1.fio}, 'is_admin': True},
 				{'user': {'fio': self.user_2.fio}, 'is_admin': False},
@@ -82,7 +82,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyChangeOwnerViewV1().as_view()(request, self.company.uuid)
+		response = CompanyChangeOwnerViewV1().as_view()(request, uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -97,11 +97,11 @@ class CompanyUpdateTest(TestCase):
 		self.assertEqual(self.member_2.is_admin, True)
 
 		# Смотрим что вьюха вернула правильные данные
-		self.assertEqual(response['result']['uuid'], str(self.company.uuid))
-		self.assertEqual(response['result']['name'], self.company.name)
-		self.assertEqual(response['result']['owner']['fio'], self.user_2.fio)
+		self.assertEqual(response['results']['uuid'], str(self.company.uuid))
+		self.assertEqual(response['results']['name'], self.company.name)
+		self.assertEqual(response['results']['owner']['fio'], self.user_2.fio)
 		self.assertEqual(
-			response['result']['members'],
+			response['results']['members'],
 			[
 				{'user': {'fio': self.user_1.fio}, 'is_admin': True},
 				{'user': {'fio': self.user_2.fio}, 'is_admin': True},
@@ -119,7 +119,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyAddMembersViewV1().as_view()(request, self.company.uuid)
+		response = CompanyAddMembersViewV1().as_view()(request, uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -131,11 +131,11 @@ class CompanyUpdateTest(TestCase):
 		self.assertEqual(Members.objects.count(), 3)
 
 		# Смотрим что вьюха вернула правильные данные
-		self.assertEqual(response['result']['uuid'], str(self.company.uuid))
-		self.assertEqual(response['result']['name'], self.company.name)
-		self.assertEqual(response['result']['owner']['fio'], self.user_1.fio)
+		self.assertEqual(response['results']['uuid'], str(self.company.uuid))
+		self.assertEqual(response['results']['name'], self.company.name)
+		self.assertEqual(response['results']['owner']['fio'], self.user_1.fio)
 		self.assertEqual(
-			response['result']['members'],
+			response['results']['members'],
 			[
 				{'user': {'fio': self.user_1.fio}, 'is_admin': True},
 				{'user': {'fio': self.user_2.fio}, 'is_admin': False},
@@ -154,7 +154,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyRemoveMembersViewV1().as_view()(request, self.company.uuid)
+		response = CompanyRemoveMembersViewV1().as_view()(request, uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -163,11 +163,11 @@ class CompanyUpdateTest(TestCase):
 		self.assertEqual(self.company.company_members.filter(user=self.user_2).exists(), False)
 
 		# Смотрим что вьюха вернула правильные данные
-		self.assertEqual(response['result']['uuid'], str(self.company.uuid))
-		self.assertEqual(response['result']['name'], self.company.name)
-		self.assertEqual(response['result']['owner']['fio'], self.user_1.fio)
+		self.assertEqual(response['results']['uuid'], str(self.company.uuid))
+		self.assertEqual(response['results']['name'], self.company.name)
+		self.assertEqual(response['results']['owner']['fio'], self.user_1.fio)
 		self.assertEqual(
-			response['result']['members'],
+			response['results']['members'],
 			[
 				{'user': {'fio': self.user_1.fio}, 'is_admin': True},
 			]
@@ -184,7 +184,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyChangeMemberPermissionViewV1().as_view()(request, self.company.uuid)
+		response = CompanyChangeMemberPermissionViewV1().as_view()(request, uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -194,11 +194,11 @@ class CompanyUpdateTest(TestCase):
 		self.assertEqual(self.member_2.is_admin, True)
 
 		# Смотрим что вьюха вернула правильные данные
-		self.assertEqual(response['result']['uuid'], str(self.company.uuid))
-		self.assertEqual(response['result']['name'], self.company.name)
-		self.assertEqual(response['result']['owner']['fio'], self.user_1.fio)
+		self.assertEqual(response['results']['uuid'], str(self.company.uuid))
+		self.assertEqual(response['results']['name'], self.company.name)
+		self.assertEqual(response['results']['owner']['fio'], self.user_1.fio)
 		self.assertEqual(
-			response['result']['members'],
+			response['results']['members'],
 			[
 				{'user': {'fio': self.user_1.fio}, 'is_admin': True},
 				{'user': {'fio': self.user_2.fio}, 'is_admin': True},

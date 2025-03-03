@@ -3,16 +3,18 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from apps.company.models import Members as CompanyMembers
+from apps.company.models import Company
 from utils import api
 from utils.models import normalize_base_url
+from utils.permissions import ChangeCompanyPermission
 from .serializers import ProjectCreateV1RequestQuery
 from ...models import Project, Members as ProjectMembers
 from ...serializers import ProjectDetailSerializerV1
 
 
 class ProjectCreateViewV1(APIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ChangeCompanyPermission, ]
+	renderer_classes = [api.JsonRenderer, ]
 
 	@transaction.atomic
 	@swagger_auto_schema(
@@ -30,14 +32,9 @@ class ProjectCreateViewV1(APIView):
 			)
 
 		try:
-			company_admin = CompanyMembers.objects.get(user=request.user, company__uuid=company_uuid)
-		except CompanyMembers.DoesNotExist:
-			return api.error_response(
-				status=403,
-				message='Пользавтель не является администратором компании'
-			)
-
-		company = company_admin.company
+			company = Company.objects.get(uuid=company_uuid, deleted=False)
+		except Company.DoesNotExist:
+			return api.error_response(status=404, message='Компания не найдена')
 
 		project = Project.objects.create(
 			name=request.data.get('name'),

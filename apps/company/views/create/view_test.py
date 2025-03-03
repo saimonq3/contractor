@@ -43,8 +43,8 @@ class CompanyCreateTest(TestCase):
 		self.assertEqual(company[0].name, 'test company')
 
 		# Проверяем что в ответе пришил корректные данные
-		self.assertEqual(str(company[0].uuid), response['result']['uuid'])
-		self.assertEqual(company[0].name, response['result']['name'])
+		self.assertEqual(str(company[0].uuid), response['results']['uuid'])
+		self.assertEqual(company[0].name, response['results']['name'])
 
 	def test_fail_create(self):
 		request = self.factory.post(
@@ -62,7 +62,7 @@ class CompanyCreateTest(TestCase):
 		self.assertEqual(400, response.status_code)
 		response = response.data
 
-		self.assertEqual(response['result']['error']['user_message'], 'Не корректные данные запроса')
+		self.assertEqual(response['results']['error']['user_message'], 'Не корректные данные запроса')
 
 		# Проверяем что Компания не создалась
 		self.assertEqual(Company.objects.count(), 0)
@@ -98,5 +98,5 @@ class CompanyCreateTest(TestCase):
 		self.assertEqual(company[0].name, 'test_company')
 
 		# Проверяем что в ответе пришил корректные данные
-		self.assertEqual(str(company[0].uuid), response['result']['uuid'])
-		self.assertEqual(company[0].name, response['result']['name'])
+		self.assertEqual(str(company[0].uuid), response['results']['uuid'])
+		self.assertEqual(company[0].name, response['results']['name'])

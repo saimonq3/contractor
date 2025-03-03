@@ -1,17 +1,20 @@
 from django.contrib import admin
 
 from utils.admin_mixin import CreatedByModelAdminMixin
-from ..models import DTO, Field, Members
+from ..models import DTO, Field
 
 
 class FieldsInLine(admin.TabularInline):
 	model = Field
 	extra = 0
-
-
-class MembersInLine(admin.TabularInline):
-	model = Members
-	extra = 0
+	fields = [
+		'created_by',
+		'type',
+		'value',
+	]
+	readonly_fields = [
+		'created_by'
+	]
 
 
 @admin.register(DTO)
@@ -39,4 +42,4 @@ class DTOAdmin(CreatedByModelAdminMixin):
 		'created_by'
 	]
 
-	inlines = [FieldsInLine, MembersInLine]
+	inlines = [FieldsInLine, ]

@@ -58,8 +58,8 @@ class CompanyListTest(TestCase):
 		self.assertEqual(200, response.status_code)
 		response = response.data
 
-		self.assertEqual(len(response['result']), 2)
-		self.assertEqual(response['result'][1]['name'], self.company_1.name)
-		self.assertEqual(response['result'][0]['name'], self.company_2.name)
-		self.assertEqual(response['result'][1]['owner']['fio'], self.user_1.fio)
-		self.assertEqual(response['result'][0]['owner']['fio'], self.user_2.fio)
+		self.assertEqual(len(response['results']), 2)
+		self.assertEqual(response['results'][1]['name'], self.company_1.name)
+		self.assertEqual(response['results'][0]['name'], self.company_2.name)
+		self.assertEqual(response['results'][1]['owner']['fio'], self.user_1.fio)
+		self.assertEqual(response['results'][0]['owner']['fio'], self.user_2.fio)

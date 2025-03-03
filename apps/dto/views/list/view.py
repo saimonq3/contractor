@@ -1,9 +1,12 @@
-from django.db.models import Q
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import CursorPagination
 from rest_framework.permissions import IsAuthenticated
 
-from ...models import DTO, Members
+from utils import api
+from utils.permissions import ReadOnlyProjectPermission
+from ...models import DTO
 from .serializers import DTOSerializerV1
 
 
@@ -12,22 +15,42 @@ class DTOCursorPagination(CursorPagination):
 	ordering = 'id'
 
 class ListDTOV1View(ListAPIView):
-	permission_classes = [IsAuthenticated, ]
+	permission_classes = [IsAuthenticated, ReadOnlyProjectPermission, ]
 	queryset = DTO.objects.all()
 	serializer_class = DTOSerializerV1
 	pagination_class = DTOCursorPagination
+	renderer_classes = [api.JsonRenderer, ]
+
+	@swagger_auto_schema(
+		manual_parameters=[
+			openapi.Parameter(
+				'name',
+				in_=openapi.IN_QUERY,
+				type=openapi.TYPE_STRING,
+				description='Имя ДТО',
+				required=False,
+			),
+			openapi.Parameter(
+				'project_uuid',
+				in_=openapi.IN_QUERY,
+				type=openapi.TYPE_STRING,
+				description='UUID проекта',
+				required=True,
+			),
+		]
+	)
+	def get(self, request, *args, **kwargs):
+		request_project_uuid = self.request.query_params.get('project_uuid')
+		if not request_project_uuid:
+			return api.error_response(status=400, message='project_uuid обязательный параметр запроса')
+		return super().get(request, *args, **kwargs)
 
 	def get_queryset(self):
-		request_name = self.request.query_params.get('name')
 		request_project_uuid = self.request.query_params.get('project_uuid')
+		dtos = DTO.objects.filter(project__uuid=request_project_uuid).select_related('project')
 
-		user_dto_ids = Members.objects.filter(user=self.request.user).values_list('dto_id')
+		if name := self.request.query_params.get('name'):
+			dtos = dtos.filter(name=name)
 
-		query = Q(id__in=user_dto_ids)
-		if request_project_uuid:
-			query.add(Q(project__uuid=request_project_uuid), Q.AND)
-		if request_name:
-			query.add(Q(name__icontains=request_name), Q.AND)
-
-		return DTO.objects.filter(query).select_related('project')
+		return dtos
 

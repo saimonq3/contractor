@@ -28,7 +28,7 @@ class ProjectAddMemberViewV1(APIView):
 				message=str(query_serializer.errors)
 			)
 		try:
-			project = Project.objects.get(uuid=uuid)
+			project = Project.objects.get(uuid=uuid, company__deleted=False)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -81,7 +81,7 @@ class ProjectRemoveMemberViewV1(APIView):
 				message=str(query_serializer.errors)
 			)
 		try:
-			project = Project.objects.get(uuid=uuid)
+			project = Project.objects.get(uuid=uuid, company__deleted=False)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -132,7 +132,7 @@ class ProjectChangeMemberPermissionViewV1(APIView):
 				message=str(query_serializer.errors)
 			)
 		try:
-			project = Project.objects.get(uuid=uuid)
+			project = Project.objects.get(uuid=uuid, company__deleted=False)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -182,7 +182,7 @@ class ProjectUpdateInfoViewV1(APIView):
 	)
 	def post(self, request, uuid):
 		try:
-			project = Project.objects.get(uuid=uuid)
+			project = Project.objects.get(uuid=uuid, company__deleted=False)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -220,7 +220,7 @@ class ProjectChangeCompanyViewV1(APIView):
 				message=str(query_serializer.errors)
 			)
 		try:
-			project = Project.objects.get(uuid=uuid)
+			project = Project.objects.get(uuid=uuid, company__deleted=False)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
@@ -268,7 +268,7 @@ class ProjectChangeOwnerViewV1(APIView):
 	)
 	def post(self, request, uuid):
 		try:
-			project = Project.objects.get(uuid=uuid)
+			project = Project.objects.get(uuid=uuid, company__deleted=False)
 		except Project.DoesNotExist:
 			return api.error_response(
 				status=404,
