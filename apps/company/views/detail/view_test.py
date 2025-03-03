@@ -3,7 +3,7 @@ import uuid
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from apps.company.models import Company, Members
+from ...models import Company, Members
 from .view import CompanyDetailViewV1
 from apps.user.models import User
 

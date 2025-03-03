@@ -1,0 +1,1 @@
+from .view import CompanyDeleteViewV1 as delete_company_v1

@@ -44,7 +44,8 @@ class ProjectCreateViewV1(APIView):
 			description=request.data.get('description'),
 			owner=request.user,
 			company=company,
-			base_url=normalize_base_url(request.data.get('base_url'))
+			base_url=normalize_base_url(request.data.get('base_url')),
+			created_by=request.user
 		)
 
 		ProjectMembers.objects.create(

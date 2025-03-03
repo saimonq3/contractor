@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from apps.company.models import Company
+from ...models import Company
 from .view import CompanyCreateViewV1
 from apps.user.models import User
 
@@ -46,7 +46,7 @@ class CompanyCreateTest(TestCase):
 		self.assertEqual(str(company[0].uuid), response['result']['uuid'])
 		self.assertEqual(company[0].name, response['result']['name'])
 
-	def test_faild_create(self):
+	def test_fail_create(self):
 		request = self.factory.post(
 			'/',
 			data={'wrong_field': 'test company'},
