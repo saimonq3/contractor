@@ -21,6 +21,7 @@ phonenumbers = "*"
 pillow = "*"
 django-sql-explorer = "*"
 django-treebeard = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 

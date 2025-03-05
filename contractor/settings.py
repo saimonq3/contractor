@@ -2,11 +2,13 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv
+import sentry_sdk
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = getenv('SECRET_KEY')
 SERVER = os.getenv('DEBUG')
+SENTRY_DSN = getenv('SENTRY_DSN')
 DEBUG = True
 
 if SERVER == 'prod':
@@ -172,3 +174,10 @@ CORS_ALLOW_HEADERS = [
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+    )
