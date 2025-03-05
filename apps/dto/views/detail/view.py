@@ -10,4 +10,4 @@ class DTODetailViewV1(APIView):
 	renderer_classes = [api.JsonRenderer, ]
 
 	def get(self, request, uuid):
-		pass
+		return api.response('ok')
