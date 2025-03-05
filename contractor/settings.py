@@ -182,5 +182,10 @@ if SENTRY_DSN:
         traces_sample_rate=1.0,
     )
 
+EXPLORER_CONNECTIONS = {
+    'default': 'default_readonly',
+}
+EXPLORER_DEFAULT_CONNECTION = 'default_readonly'
+
 EXPLORER_PERMISSION_VIEW = lambda r: r.user.is_superuser
 EXPLORER_PERMISSION_CHANGE = lambda r: r.user.is_superuser
