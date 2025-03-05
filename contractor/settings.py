@@ -181,3 +181,6 @@ if SENTRY_DSN:
         send_default_pii=True,
         traces_sample_rate=1.0,
     )
+
+EXPLORER_PERMISSION_VIEW = lambda r: r.user.is_superuser
+EXPLORER_PERMISSION_CHANGE = lambda r: r.user.is_superuser
