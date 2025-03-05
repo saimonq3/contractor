@@ -32,3 +32,4 @@ sqlparse==0.5.3 ; python_version >= '3.8'
 typing-extensions==4.12.2 ; python_version >= '3.8'
 uritemplate==4.1.1 ; python_version >= '3.6'
 django-treebeard==4.7.1
+sentry-sdk==2.22.0
