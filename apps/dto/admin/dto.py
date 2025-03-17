@@ -17,6 +17,8 @@ class FieldsInLine(admin.TabularInline):
 	]
 
 
+
+
 @admin.register(DTO)
 class DTOAdmin(CreatedByModelAdminMixin):
 	list_display = [
@@ -42,4 +44,26 @@ class DTOAdmin(CreatedByModelAdminMixin):
 		'created_by'
 	]
 
-	inlines = [FieldsInLine, ]
+
+@admin.register(Field)
+class DTOFieldsAdmin(CreatedByModelAdminMixin):
+	fields = [
+		'uuid',
+		'dto',
+		'type',
+		'value',
+		'description'
+	]
+
+	list_display = [
+		'uuid',
+		'dto',
+		'type',
+		'value',
+		'description'
+	]
+	readonly_fields = [
+		'uuid',
+		'id',
+		'created_by'
+	]

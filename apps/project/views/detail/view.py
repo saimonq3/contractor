@@ -2,7 +2,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from apps.project.models import Members, Project
+from apps.project.models import Project
 from apps.project.serializers import ProjectDetailSerializerV1
 from utils import api
 

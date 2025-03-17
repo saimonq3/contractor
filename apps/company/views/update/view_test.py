@@ -46,7 +46,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request_admin_user, self.user_1)
 
-		response_1 = CompanyUpdateNameViewV1().as_view()(request_admin_user, uuid=str(self.company.uuid))
+		response_1 = CompanyUpdateNameViewV1().as_view()(request_admin_user, company_uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response_1.status_code)
 		response = response_1.data
@@ -82,7 +82,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyChangeOwnerViewV1().as_view()(request, uuid=str(self.company.uuid))
+		response = CompanyChangeOwnerViewV1().as_view()(request, company_uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -119,7 +119,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyAddMembersViewV1().as_view()(request, uuid=str(self.company.uuid))
+		response = CompanyAddMembersViewV1().as_view()(request, company_uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -154,7 +154,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyRemoveMembersViewV1().as_view()(request, uuid=str(self.company.uuid))
+		response = CompanyRemoveMembersViewV1().as_view()(request, company_uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -184,7 +184,7 @@ class CompanyUpdateTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyChangeMemberPermissionViewV1().as_view()(request, uuid=str(self.company.uuid))
+		response = CompanyChangeMemberPermissionViewV1().as_view()(request, company_uuid=str(self.company.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data

@@ -1,0 +1,1 @@
+from .view import DTODetailViewV1 as dto_detail_v1

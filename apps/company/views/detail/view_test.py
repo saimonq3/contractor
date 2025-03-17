@@ -34,7 +34,7 @@ class CompanyDetailTest(TestCase):
 
 		force_authenticate(request, self.user)
 
-		response = CompanyDetailViewV1().as_view()(request, uuid=self.company.uuid)
+		response = CompanyDetailViewV1().as_view()(request, company_uuid=self.company.uuid)
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -51,6 +51,6 @@ class CompanyDetailTest(TestCase):
 
 		force_authenticate(request, self.user)
 
-		response = CompanyDetailViewV1().as_view()(request, uuid=uuid.uuid4())
+		response = CompanyDetailViewV1().as_view()(request, company_uuid=uuid.uuid4())
 
 		self.assertEqual(403, response.status_code)

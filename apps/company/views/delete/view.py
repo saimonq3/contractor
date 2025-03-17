@@ -2,10 +2,9 @@ from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from apps.project.models import Project
-from utils.permissions import ChangeCompanyPermission
-from ...models import Members, Company
 from utils import api
+from utils.permissions import ChangeCompanyPermission
+from ...models import Company
 
 
 class CompanyDeleteViewV1(APIView):
@@ -14,9 +13,9 @@ class CompanyDeleteViewV1(APIView):
 	renderer_classes = [api.JsonRenderer, ]
 
 	@transaction.atomic
-	def delete(self, request, uuid):
+	def delete(self, request, company_uuid):
 		try:
-			company = Company.objects.get(uuid=uuid)
+			company = Company.objects.get(uuid=company_uuid)
 		except Company.DoesNotExist:
 			return api.error_response(status=404, message='Компания не найдена')
 		company.deleted = True

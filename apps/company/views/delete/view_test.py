@@ -31,7 +31,7 @@ class CompanyDeleteTest(TestCase):
 
 		force_authenticate(request, self.user_1)
 
-		response = CompanyDeleteViewV1().as_view()(request, uuid=str(self.company_1.uuid))
+		response = CompanyDeleteViewV1().as_view()(request, company_uuid=str(self.company_1.uuid))
 
 		self.assertEqual(200, response.status_code)
 		response = response.data
@@ -49,7 +49,7 @@ class CompanyDeleteTest(TestCase):
 
 		force_authenticate(request, self.user_2)
 
-		response = CompanyDeleteViewV1().as_view()(request, self.company_1.uuid)
+		response = CompanyDeleteViewV1().as_view()(request, company_uuid=str(self.company_1.uuid))
 
 		self.assertEqual(403, response.status_code)
 
@@ -65,7 +65,7 @@ class CompanyDeleteTest(TestCase):
 
 		force_authenticate(request, self.user_2)
 
-		response = CompanyDeleteViewV1().as_view()(request, self.company_2.uuid)
+		response = CompanyDeleteViewV1().as_view()(request, company_uuid=str(self.company_2.uuid))
 
 		self.assertEqual(403, response.status_code)
 

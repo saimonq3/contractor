@@ -17,9 +17,9 @@ class CompanyDetailViewV1(APIView):
 		operation_summary='Информация по компании',
 		responses={200: CompanyDetailSerializerV1()}
 	)
-	def get(self, request, uuid):
+	def get(self, request, company_uuid):
 		try:
-			company = Company.objects.get(uuid=uuid, deleted=False)
+			company = Company.objects.get(uuid=company_uuid, deleted=False)
 		except Company.DoesNotExist:
 			return api.error_response(message='Компания не найдена', status=404)
 

@@ -4,10 +4,11 @@ from apps.project.models import Members as ProjectMembers
 from apps.company.models import Members as CompanyMembers
 
 def pars_data(data):
+	result = {}
 	for key, value in data.items():
 		if key.endswith('uuid'):
-			return value
-	return None
+			result[key] = value
+	return result
 
 
 def find_uuid(request):
@@ -18,14 +19,14 @@ def find_uuid(request):
 	request_kwargs = pars_data(request.parser_context['kwargs'])
 	query_params = pars_data(request.query_params)
 	data = pars_data(request.data)
-	return request_kwargs or query_params or data or None
+	return request_kwargs|query_params|data
 
 
 class ReadOnlyCompanyPermission(BasePermission):
 	def has_permission(self, request, view):
-		request_company_uuid = find_uuid(request)
+		uuid = find_uuid(request)
 		try:
-			CompanyMembers.objects.get(company__uuid=request_company_uuid, user=request.user)
+			CompanyMembers.objects.get(company__uuid=uuid.get('company_uuid'), user=request.user)
 			return True
 		except CompanyMembers.DoesNotExist:
 			return False
@@ -33,9 +34,9 @@ class ReadOnlyCompanyPermission(BasePermission):
 
 class ChangeCompanyPermission(BasePermission):
 	def has_permission(self, request, view):
-		request_company_uuid = find_uuid(request)
+		uuid = find_uuid(request)
 		try:
-			CompanyMembers.objects.get(company__uuid=request_company_uuid, user=request.user, is_admin=True)
+			CompanyMembers.objects.get(company__uuid=uuid.get('company_uuid'), user=request.user, is_admin=True)
 			return True
 		except CompanyMembers.DoesNotExist:
 			return False
@@ -43,9 +44,9 @@ class ChangeCompanyPermission(BasePermission):
 
 class ReadOnlyProjectPermission(BasePermission):
 	def has_permission(self, request, view):
-		request_project_uuid = find_uuid(request)
+		uuid = find_uuid(request)
 		try:
-			ProjectMembers.objects.get(project__uuid=request_project_uuid, user=request.user)
+			ProjectMembers.objects.get(project__uuid=uuid.get('project_uuid'), user=request.user)
 			return True
 		except ProjectMembers.DoesNotExist:
 			return False
@@ -53,15 +54,9 @@ class ReadOnlyProjectPermission(BasePermission):
 
 class ChangeProjectPermission(BasePermission):
 	def has_permission(self, request, view):
-		request_project_uuid = find_uuid(request)
+		uuid = find_uuid(request)
 		try:
-			ProjectMembers.objects.get(project__uuid=request_project_uuid, user=request.user, is_admin=True)
+			ProjectMembers.objects.get(project__uuid=uuid.get('project_uuid'), user=request.user, is_admin=True)
 			return True
 		except ProjectMembers.DoesNotExist:
 			return False
-
-
-class ReadOnlyDTOPermission(BasePermission):
-	#TODO надо дописать, но я уже вырубаюсь, ЗАВТРА!
-	def has_permission(self, request, view):
-		return True

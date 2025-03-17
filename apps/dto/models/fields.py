@@ -24,6 +24,7 @@ class Field(TimeStampedModel, CreatedByModelMixin):
                             related_name='dto_fields')
     type = models.PositiveIntegerField(choices=TYPE, default=None, null=True, blank=True)
     value = models.TextField(default=None, blank=True, null=True)
+    description = models.TextField(default=None, blank=True, null=True, verbose_name='Описание')
 
     def __str__(self):
         return f'{self.dto}__{self.type}'

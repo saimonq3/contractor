@@ -21,7 +21,7 @@ class CompanyUpdateNameViewV1(APIView):
 		operation_description='Изменить название компании',
 		operation_summary='Изменить название компании'
 	)
-	def post(self, request, uuid):
+	def post(self, request, company_uuid):
 		query_serializer = CompanyUpdateQuerySerializer(data=request.data)
 		if not query_serializer.is_valid():
 			return api.error_response(
@@ -29,7 +29,7 @@ class CompanyUpdateNameViewV1(APIView):
 				message=str(query_serializer.errors)
 			)
 		try:
-			company = Company.objects.get(uuid=uuid, deleted=False)
+			company = Company.objects.get(uuid=company_uuid, deleted=False)
 		except Company.DoesNotExist:
 			return api.error_response(status=404, message='Компания не найдена')
 		company.name = request.data.get('name')
@@ -50,7 +50,7 @@ class CompanyChangeOwnerViewV1(APIView):
 		operation_description='Изменить владельца компании',
 		operation_summary='Изменить владельца компании'
 	)
-	def post(self, request, uuid):
+	def post(self, request, company_uuid):
 		query_serializer = CompanyMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
 			return api.error_response(
@@ -58,7 +58,7 @@ class CompanyChangeOwnerViewV1(APIView):
 				message=str(query_serializer.errors)
 			)
 		try:
-			company = Company.objects.get(uuid=uuid, deleted=False)
+			company = Company.objects.get(uuid=company_uuid, deleted=False)
 		except Company.DoesNotExist:
 			return api.error_response(status=404, message='Компания не найдена')
 		try:
@@ -99,7 +99,7 @@ class CompanyAddMembersViewV1(APIView):
 		operation_description='Добавить пользователя в компанию',
 		operation_summary='Добавить пользователя в компанию'
 	)
-	def post(self, request, uuid):
+	def post(self, request, company_uuid):
 		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
 			return api.error_response(
@@ -116,7 +116,7 @@ class CompanyAddMembersViewV1(APIView):
 			)
 
 		try:
-			company = Company.objects.get(uuid=uuid, deleted=False)
+			company = Company.objects.get(uuid=company_uuid, deleted=False)
 		except Company.DoesNotExist:
 			return api.error_response(status=404, message='Компания не найдена')
 
@@ -141,7 +141,7 @@ class CompanyRemoveMembersViewV1(APIView):
 		operation_description='Убрать пользователя из компании',
 		operation_summary='Убрать пользователя из компании'
 	)
-	def post(self, request, uuid):
+	def post(self, request, company_uuid):
 		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
 			return api.error_response(
@@ -158,7 +158,7 @@ class CompanyRemoveMembersViewV1(APIView):
 			)
 
 		try:
-			company = Company.objects.get(uuid=uuid, deleted=False)
+			company = Company.objects.get(uuid=company_uuid, deleted=False)
 		except Company.DoesNotExist:
 			return api.error_response(status=404, message='Компания не найдена')
 
@@ -191,7 +191,7 @@ class CompanyChangeMemberPermissionViewV1(APIView):
 		operation_description='Изменить права пользователя в компании',
 		operation_summary='Изменить права пользователя в компании'
 	)
-	def post(self, request, uuid):
+	def post(self, request, company_uuid):
 		query_serializer = CompanyChangeMemberV1Serializer(data=request.data)
 		if not query_serializer.is_valid():
 			return api.error_response(
@@ -208,7 +208,7 @@ class CompanyChangeMemberPermissionViewV1(APIView):
 			)
 
 		try:
-			company = Company.objects.get(uuid=uuid, deleted=False)
+			company = Company.objects.get(uuid=company_uuid, deleted=False)
 		except Company.DoesNotExist:
 			return api.error_response(status=404, message='Компания не найдена')
 

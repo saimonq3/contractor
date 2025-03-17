@@ -61,6 +61,6 @@ class CompanyCreateTest(TestCase):
 
 		force_authenticate(request, self.user_2)
 
-		response = ProjectCreateViewV1().as_view()(request, self.company_2.uuid)
+		response = ProjectCreateViewV1().as_view()(request, company_uuid=self.company_2.uuid)
 
 		self.assertEqual(403, response.status_code)
